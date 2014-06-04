@@ -1,6 +1,6 @@
 # Serve SPM
 
-[![Build Status](https://travis-ci.org/spmjs/spm-serve.png)](https://travis-ci.org/spmjs/spm-serve)
+[![Build Status](https://travis-ci.org/spmjs/serve-spm.png)](https://travis-ci.org/spmjs/serve-spm)
 
 SPM@3x build middleware.
 
