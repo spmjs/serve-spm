@@ -1,5 +1,4 @@
 var join = require('path').join;
-var basename = require('path').basename;
 var relative = require('path').relative;
 var fs = require('fs');
 var through = require('through2');
@@ -13,7 +12,6 @@ var wrapper = require('gulp-wrapper');
 
 var umi = require('umi');
 var plugin = umi.plugin;
-var concat = umi.concat;
 
 var RE_CSS  = /\.(css|less)$/;
 var RE_JS   = /\.(js)$/;
@@ -31,11 +29,11 @@ module.exports = function(root, opt) {
   process.chdir(opt.cwd);
 
   return function(req, res, next) {
-    next && next();
-
     if (cache[req.url]) {
       return res.end(cache[req.url]);
     }
+    
+    next = next || function() {};
 
     var file = relative(opt.cwd, join(root, req.url));
     if (!fs.existsSync(file)) {
