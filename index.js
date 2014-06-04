@@ -3,7 +3,7 @@ var relative = require('path').relative;
 var fs = require('fs');
 var through = require('through2');
 var pipe = require('multipipe');
-var _ = require('lodash');
+var extend = require('extend');
 
 var gulp = require('gulp');
 var less = require('gulp-less');
@@ -19,7 +19,7 @@ var RE_JS   = /\.(js)$/;
 var cache = {};
 
 module.exports = function(root, opt) {
-  opt = _.extend(opt || {}, {
+  opt = extend(opt || {}, {
     include: 'all'
   });
   opt.cwd = opt.cwd || join(root, '../');

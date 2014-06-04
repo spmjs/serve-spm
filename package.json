@@ -26,13 +26,13 @@
     "request": "~2.36.0"
   },
   "dependencies": {
-    "lodash": "~2.4.1",
-    "multipipe": "~0.1.1",
-    "gulp-if": "~1.2.1",
-    "gulp-wrapper": "~0.1.32",
-    "through2": "~0.4.2",
-    "gulp-less": "~1.2.3",
+    "extend": "^1.2.1",
     "gulp": "~3.7.0",
+    "gulp-if": "~1.2.1",
+    "gulp-less": "~1.2.3",
+    "gulp-wrapper": "~0.1.32",
+    "multipipe": "~0.1.1",
+    "through2": "~0.4.2",
     "umi": "~0.3.0"
   }
 }
