@@ -22,10 +22,13 @@ module.exports = function(root, opt) {
   opt = extend(opt || {}, {
     include: 'all'
   });
+
   opt.cwd = opt.cwd || join(root, '../');
+
   opt = umi.buildArgs(opt);
   opt = umi.util.extendOption(opt);
   
+  // FIXME: may be conflict with other actions
   process.chdir(opt.cwd);
 
   return function(req, res, next) {
@@ -46,17 +49,18 @@ module.exports = function(root, opt) {
       entry: [file]
     });
 
+    // Build
     if (RE_CSS.test(file)) {
-      buildCSS(file, opt, end);
+      buildCSS(file, opt, buildEnd);
     }
     else if (RE_JS.test(file)) {
-      buildJS(file, opt, end);
+      buildJS(file, opt, buildEnd);
     }
     else {
       next();
     }
 
-    function end(file) {
+    function buildEnd(file) {
       var text = file.contents ? file.contents.toString() : '';
       var isDevMode = process.env.NODE_ENV !== 'production';
       if (!isDevMode) cache[req.url] = text;
