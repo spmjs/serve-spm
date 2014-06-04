@@ -15,6 +15,9 @@ var umi = require('umi');
 var plugin = umi.plugin;
 var concat = umi.concat;
 
+var RE_CSS  = /\.(css|less)$/;
+var RE_JS   = /\.(js)$/;
+
 var cache = {};
 
 module.exports = function(root, opt) {
@@ -27,8 +30,6 @@ module.exports = function(root, opt) {
   
   process.chdir(opt.cwd);
 
-  var isDevMode = process.env.NODE_ENV != 'production';
-
   return function(req, res, next) {
     next && next();
 
@@ -38,17 +39,19 @@ module.exports = function(root, opt) {
 
     var file = relative(opt.cwd, join(root, req.url));
     if (!fs.existsSync(file)) {
+      console.error('error: file %s not found', file);
       return next();
     }
 
     opt.pkg = new umi.Package(opt.cwd, {
-      extraDeps: {handlebars: 'handlebars-runtime'}
+      extraDeps: {handlebars: 'handlebars-runtime'},
+      entry: [file]
     });
 
-    if (isCSS(file)) {
+    if (RE_CSS.test(file)) {
       buildCSS(file, opt, end);
     }
-    else if (isJS(file)) {
+    else if (RE_JS.test(file)) {
       buildJS(file, opt, end);
     }
     else {
@@ -57,6 +60,7 @@ module.exports = function(root, opt) {
 
     function end(file) {
       var text = file.contents ? file.contents.toString() : '';
+      var isDevMode = process.env.NODE_ENV !== 'production';
       if (!isDevMode) cache[req.url] = text;
       res.end(text);
     }
@@ -96,14 +100,3 @@ function buildJS(file, opt, callback) {
     through.obj(callback)
   );
 }
-
-var RE_CSS  = /\.(css|less)$/;
-var RE_JS   = /\.(js)$/;
-
-function isCSS(file) {
-  return RE_CSS.test(file);
-}
-
-function isJS(file) {
-  return RE_JS.test(file);
-};

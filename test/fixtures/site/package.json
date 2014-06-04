@@ -2,8 +2,9 @@
   "name": "test site",
   "version": "0.1.0",
   "spm": {
-    "output": [
-      "public/a.css"
-    ]
+    "dependencies": {
+      "normalize.css": "3.0.1",
+      "type": "1.0.0"
+    }
   }
 }
