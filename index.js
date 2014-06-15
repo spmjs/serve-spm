@@ -31,7 +31,22 @@ module.exports = function(root, src) {
     var file = join(src, req.pathname);
     var extname = path.extname(file);
 
-    var pkg = new Package(root);
+    // Proxy handlebars.runtime
+    // 很恶心的实现，一定有更好的方式
+    if (req.pathname === '/dist/cjs/handlebars.runtime.js' ||
+      req.pathname === '/handlebars-runtime.js') {
+      res.setHeader('Content-Type', mime.lookup('.js'));
+      res.writeHead(200);
+      var handlebarsFile = join(__dirname, 'handlebars.runtime.js');
+      var handlebarsData = fs.readFileSync(handlebarsFile, 'utf-8');
+      var name = req.pathname.slice(1, -3);
+      handlebarsData = handlebarsData.replace('{{name}}', name);
+      return res.end(handlebarsData);
+    }
+
+    var pkg = new Package(root, {
+      extraDeps: {handlebars: 'handlebars-runtime'}
+    });
 
     var re = /\/sea-modules\/(.+?)\//;
     var m = req.pathname.match(re);
@@ -109,7 +124,7 @@ function parseJS(data, pkg) {
     if (isRelative(dep)) {
       var extname = path.extname(dep);
       if (plugins[extname]) {
-        return format('require("%s.js");', dep);
+        return format('require("%s.js")', dep);
       }
 
       return item.string;
@@ -117,7 +132,7 @@ function parseJS(data, pkg) {
 
     else {
       var pkg_ = pkg.dependencies[dep];
-      return format('require("sea-modules/%s/%s/%s");',
+      return format('require("sea-modules/%s/%s/%s")',
         pkg_.name, pkg_.version, pkg_.main);
     }
   });

@@ -82,7 +82,7 @@ describe('serve spm', function() {
 
     it('js in package which require other package', function(done) {
       request('http://localhost:'+port+'/sea-modules/js-a/1.0.0/index.js', function(err, res, body) {
-        body.should.be.eql('define(function(require, exports, module) {\n\nvar plus = require(\'./plus\');\nvar b = require(\"sea-modules/js-b/2.0.0/index.js\");;\n\nmodule.exports = \'a@1.0.0, \' + plus + b;\n\n});');
+        body.should.be.eql('define(function(require, exports, module) {\n\nvar plus = require(\'./plus\');\nvar b = require(\"sea-modules/js-b/2.0.0/index.js\");\n\nmodule.exports = \'a@1.0.0, \' + plus + b;\n\n});');
         done();
       });
     });
