@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/spmjs/serve-spm.png)](https://travis-ci.org/spmjs/serve-spm)
 
-SPM@3x build middleware.
+spm@3x middleware.
 
 ## Usage
 
@@ -11,15 +11,8 @@ var express = require('express');
 var serveSPM = require('serve-spm');
 
 var app = express();
-app.use(serveSPM('public'));
+app.use(serveSPM(__dirname, 'public'));
 ```
-
-跨域 TPL 怎么搞
-
-## 
-
-1. PRODUCTION 代理 DIST 目录
-
 
 ## LICENSE
 
