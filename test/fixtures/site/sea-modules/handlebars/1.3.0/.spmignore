@@ -1,0 +1,9 @@
+bench/
+bin/
+components/
+lib/
+node_modules/
+sea-modules/
+spec/
+src/
+tasks/

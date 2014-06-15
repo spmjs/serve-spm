@@ -1,0 +1,10 @@
+{
+  "name": "js-a",
+  "version": "1.0.0",
+  "spm": {
+    "main": "index.js",
+    "dependencies": {
+      "js-b": "2.0.0"
+    }
+  }
+}
