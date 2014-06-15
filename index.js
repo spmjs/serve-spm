@@ -70,9 +70,11 @@ module.exports = function(root, src) {
     var data = fs.readFileSync(file, 'utf-8');
 
     // Wrap JS files with CMD
-    if (extname === '.js' && req.href.indexOf('?nowrap') === -1) {
+    if (extname === '.js') {
       data = parseJS(data, pkg);
-      data = wrapCMD(data);
+      if (req.href.indexOf('?nowrap') === -1) {
+        data = wrapCMD(data);
+      }
     }
 
     // Transform css @import id
