@@ -28,8 +28,12 @@
   "dependencies": {
     "css-imports": "^0.3.0",
     "father": "^0.6.13",
+    "gulp": "^3.8.0",
+    "gulp-transport": "^0.5.5",
     "mime": "^1.2.11",
+    "multipipe": "^0.1.1",
     "requires": "^1.0.1",
+    "through2": "^0.5.1",
     "url": "^0.10.1"
   }
 }

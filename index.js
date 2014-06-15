@@ -7,17 +7,27 @@ var Package = require('father').SpmPackage;
 var imports = require('css-imports');
 var requires = require('requires');
 var format = require('util').format;
+var gulpTransport = require('gulp-transport');
+var through = require('through2');
+var pipe = require('multipipe');
+var gulp = require('gulp');
 
-module.exports = function(root, src, opt) {
+var plugins = {
+  '.tpl': gulpTransport.plugin.tplParser,
+  '.json': gulpTransport.plugin.jsonParser,
+  '.handlebars': gulpTransport.plugin.handlebarsParser,
+  '.css': gulpTransport.plugin.css2jsParser
+};
 
-  opt = opt || {};
+module.exports = function(root, src) {
+
   src = join(root, src);
 
   return function(req, res, next) {
 
     next = next || function() {};
 
-    req = url.parse(req.url);
+    req = url.parse(req.url.toLowerCase());
     var file = join(src, req.pathname);
     var extname = path.extname(file);
 
@@ -30,7 +40,31 @@ module.exports = function(root, src, opt) {
     }
 
     if (!fs.existsSync(file)) {
-      return next();
+      if (extname !== '.js') return next();
+
+      var newfile = file.slice(0, -3);
+      var newextname = path.extname(newfile);
+      var plugin = plugins[newextname];
+
+      if (!plugin) {
+        return next();
+      }
+
+      var args = {
+        pkg: pkg,
+        cwd: root,
+        idleading: './'
+      };
+
+      return pipe(
+        gulp.src(newfile),
+        plugin(args),
+        through.obj(function(file) {
+          res.setHeader('Content-Type', mime.lookup('.js'));
+          res.writeHead(200);
+          res.end(file.contents);
+        })
+      );
     }
 
     var data = fs.readFileSync(file, 'utf-8');
@@ -70,9 +104,14 @@ function parseCSS(data, pkg) {
 
 function parseJS(data, pkg) {
   return requires(data, function(item) {
-    var dep = item.path;
+    var dep = item.path.toLowerCase();
 
     if (isRelative(dep)) {
+      var extname = path.extname(dep);
+      if (plugins[extname]) {
+        return format('require("%s.js");', dep);
+      }
+
       return item.string;
     }
 
