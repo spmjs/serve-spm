@@ -12,12 +12,13 @@ var through = require('through2');
 var pipe = require('multipipe');
 var gulp = require('gulp');
 
-var plugins = {
+var JS_PLUGINS = {
   '.tpl': gulpTransport.plugin.tplParser,
   '.json': gulpTransport.plugin.jsonParser,
   '.handlebars': gulpTransport.plugin.handlebarsParser,
   '.css': gulpTransport.plugin.css2jsParser
 };
+var RE_SEAMODULE = /\/sea-modules\/(.+?)\//;
 
 module.exports = function(root, src) {
 
@@ -35,21 +36,17 @@ module.exports = function(root, src) {
     // 很恶心的实现，一定有更好的方式
     if (req.pathname === '/dist/cjs/handlebars.runtime.js' ||
       req.pathname === '/handlebars-runtime.js') {
-      res.setHeader('Content-Type', mime.lookup('.js'));
-      res.writeHead(200);
       var handlebarsFile = join(__dirname, 'handlebars.runtime.js');
       var handlebarsData = fs.readFileSync(handlebarsFile, 'utf-8');
       var name = req.pathname.slice(1, -3);
       handlebarsData = handlebarsData.replace('{{name}}', name);
-      return res.end(handlebarsData);
+      return end(handlebarsData, '.js');
     }
 
     var pkg = new Package(root, {
       extraDeps: {handlebars: 'handlebars-runtime'}
     });
-
-    var re = /\/sea-modules\/(.+?)\//;
-    var m = req.pathname.match(re);
+    var m = req.pathname.match(RE_SEAMODULE);
     if (m && m[0]) {
       pkg = pkg.dependencies[m[1]];
     }
@@ -57,10 +54,10 @@ module.exports = function(root, src) {
     if (!fs.existsSync(file)) {
       if (extname !== '.js') return next();
 
+      // Remove .js
       var newfile = file.slice(0, -3);
-      var newextname = path.extname(newfile);
-      var plugin = plugins[newextname];
 
+      var plugin = JS_PLUGINS[path.extname(newfile)];
       if (!plugin) {
         return next();
       }
@@ -75,9 +72,7 @@ module.exports = function(root, src) {
         gulp.src(newfile),
         plugin(args),
         through.obj(function(file) {
-          res.setHeader('Content-Type', mime.lookup('.js'));
-          res.writeHead(200);
-          res.end(file.contents);
+          end(file.contents, '.js');
         })
       );
     }
@@ -95,9 +90,13 @@ module.exports = function(root, src) {
       data = parseCSS(data, pkg);
     }
 
-    res.setHeader('Content-Type', mime.lookup(extname));
-    res.writeHead(200);
-    res.end(data);
+    end(data, extname);
+
+    function end(data, extname) {
+      res.setHeader('Content-Type', mime.lookup(extname));
+      res.writeHead(200);
+      return res.end(data);
+    }
   };
 };
 
@@ -123,7 +122,9 @@ function parseJS(data, pkg) {
 
     if (isRelative(dep)) {
       var extname = path.extname(dep);
-      if (plugins[extname]) {
+
+      // Add .js for js plugins
+      if (JS_PLUGINS[extname]) {
         return format('require("%s.js")', dep);
       }
 
@@ -138,14 +139,14 @@ function parseJS(data, pkg) {
   });
 }
 
-function isRelative(item) {
-  return item.charAt(0) === '.';
-}
-
 function wrapCMD(data) {
   return [
     'define(function(require, exports, module) {',
     data,
     '});'
   ].join('\n');
+}
+
+function isRelative(item) {
+  return item.charAt(0) === '.';
 }
