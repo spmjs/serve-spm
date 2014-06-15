@@ -26,13 +26,10 @@
     "request": "~2.36.0"
   },
   "dependencies": {
-    "extend": "^1.2.1",
-    "gulp": "~3.7.0",
-    "gulp-if": "~1.2.1",
-    "gulp-less": "~1.2.3",
-    "gulp-wrapper": "~0.1.32",
-    "multipipe": "~0.1.1",
-    "through2": "~0.4.2",
-    "umi": "~0.3.0"
+    "css-imports": "^0.3.0",
+    "father": "^0.6.13",
+    "mime": "^1.2.11",
+    "requires": "^1.0.1",
+    "url": "^0.10.1"
   }
 }
