@@ -114,7 +114,7 @@ describe('serve spm', function() {
 
     it('handlebars plugin', function(done) {
       request('http://localhost:'+port+'/plugins/index.handlebars.js', function(err, res, body) {
-        body.should.be.eql('define(\"plugins/index.handlebars\", [\"handlebars-runtime\"], function(require, exports, module) {\nvar Handlebars = require(\"handlebars-runtime\")[\"default\"];\nmodule.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {\n  this.compilerInfo = [4,\'>= 1.0.0\'];\nhelpers = this.merge(helpers, Handlebars.helpers); data = data || {};\n  \n\n\n  return \"todo\\n\";\n  });\n});\n');
+        body.should.be.eql('define(\"plugins/index.handlebars\", [\"dist/cjs/handlebars.runtime\"], function(require, exports, module) {\nvar Handlebars = require(\"dist/cjs/handlebars.runtime\")[\"default\"];\nmodule.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {\n  this.compilerInfo = [4,\'>= 1.0.0\'];\nhelpers = this.merge(helpers, Handlebars.helpers); data = data || {};\n  \n\n\n  return \"todo\\n\";\n  });\n});\n');
         done();
       });
     });
