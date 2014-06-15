@@ -21,7 +21,7 @@ var plugins = {
 
 module.exports = function(root, src) {
 
-  src = join(root, src);
+  src = join(root, src || '');
 
   return function(req, res, next) {
 
@@ -70,11 +70,9 @@ module.exports = function(root, src) {
     var data = fs.readFileSync(file, 'utf-8');
 
     // Wrap JS files with CMD
-    if (extname === '.js') {
+    if (extname === '.js' && req.href.indexOf('?nowrap') === -1) {
       data = parseJS(data, pkg);
-      if (req.href.indexOf('?nowrap') === -1) {
-        data = wrapCMD(data);
-      }
+      data = wrapCMD(data);
     }
 
     // Transform css @import id
