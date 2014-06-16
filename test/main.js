@@ -55,6 +55,13 @@ describe('serve spm', function() {
         done();
       });
     });
+
+    it('support less', function(done) {
+      request('http://localhost:'+port+'/precompilers/index.css', function(err, res, body) {
+        body.should.be.eql('@import \'css-a\';\np {\n  color: green;\n}\na {\n  color: #5b83ad;\n}\n');
+        done();
+      });
+    });
   });
 
   describe('js', function() {

@@ -1,6 +1,7 @@
 var path = require('path');
 var join = path.join;
 var fs = require('fs');
+var read = fs.readFileSync;
 var mime = require('mime');
 var url = require('url');
 var Package = require('father').SpmPackage;
@@ -11,6 +12,7 @@ var gulpTransport = require('gulp-transport');
 var through = require('through2');
 var pipe = require('multipipe');
 var gulp = require('gulp');
+var less = require('less');
 
 var JS_PLUGINS = {
   '.tpl': gulpTransport.plugin.tplParser,
@@ -54,7 +56,7 @@ module.exports = function(root, opts) {
     if (req.pathname === '/dist/cjs/handlebars.runtime.js' ||
       req.pathname === '/handlebars-runtime.js') {
       var handlebarsFile = join(__dirname, 'handlebars.runtime.js');
-      var handlebarsData = fs.readFileSync(handlebarsFile, 'utf-8');
+      var handlebarsData = read(handlebarsFile, 'utf-8');
       var name = req.pathname.slice(1, -3);
       handlebarsData = handlebarsData.replace('{{name}}', name);
       return end(handlebarsData, '.js');
@@ -66,7 +68,28 @@ module.exports = function(root, opts) {
     }
 
     if (!fs.existsSync(file)) {
-      if (extname !== '.js') return next();
+      if (extname !== '.js') {
+
+        // May be .less
+        if (extname === '.css') {
+          var lessfile = file.replace(/\.css$/, '.less');
+          if (fs.existsSync(lessfile)) {
+            less.render(read(lessfile, 'utf-8'), {
+              paths: [path.dirname(lessfile)]
+            }, function(err, css) {
+              if (err) {
+                console.error(err);
+                next();
+              } else {
+                end(css, '.css');
+              }
+            });
+            return;
+          }
+        }
+
+        return next();
+      }
 
       // Remove .js
       var newfile = file.slice(0, -3);
@@ -91,7 +114,7 @@ module.exports = function(root, opts) {
       );
     }
 
-    var data = fs.readFileSync(file, 'utf-8');
+    var data = read(file, 'utf-8');
 
     // Wrap JS files with CMD
     if (extname === '.js' && req.href.indexOf('?nowrap') === -1) {
