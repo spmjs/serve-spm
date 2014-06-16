@@ -20,16 +20,14 @@ var JS_PLUGINS = {
 };
 var RE_SEAMODULE = /\/sea-modules\/(.+?)\//;
 
-module.exports = function(root, src) {
-
-  src = join(root, src || '');
+module.exports = function(root) {
 
   return function(req, res, next) {
 
     next = next || function() {};
 
     req = url.parse(req.url.toLowerCase());
-    var file = join(src, req.pathname);
+    var file = join(root, req.pathname);
     var extname = path.extname(file);
 
     // Proxy handlebars.runtime

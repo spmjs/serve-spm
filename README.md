@@ -9,9 +9,10 @@ spm@3x middleware.
 ```javascript
 var express = require('express');
 var serveSPM = require('serve-spm');
+var join = require('path').join;
 
 var app = express();
-app.use(serveSPM(__dirname, 'public'));
+app.use(serveSPM(join(__dirname, 'public')));
 ```
 
 ## LICENSE
