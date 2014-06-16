@@ -20,13 +20,32 @@ var JS_PLUGINS = {
 };
 var RE_SEAMODULE = /\/sea-modules\/(.+?)\//;
 
-module.exports = function(root) {
+module.exports = function(root, opts) {
+
+  opts = opts || {};
+  if (typeof opts.proxy === 'string') {
+    opts.proxy = [opts.proxy];
+  }
 
   return function(req, res, next) {
 
     next = next || function() {};
 
-    req = url.parse(req.url.toLowerCase());
+    var _url = req.url.toLowerCase();
+    var pkg = new Package(root, {
+      extraDeps: {handlebars: 'handlebars-runtime'}
+    });
+
+    if (opts.proxy) {
+      opts.proxy.forEach(function(p) {
+        if (p.charAt(0) !== '/' && p !== '') {
+          p = '/' + p;
+        }
+        _url = _url.replace(p+'/'+pkg.name+'/'+pkg.version, '');
+      });
+    }
+
+    req = url.parse(_url);
     var file = join(root, req.pathname);
     var extname = path.extname(file);
 
@@ -41,9 +60,6 @@ module.exports = function(root) {
       return end(handlebarsData, '.js');
     }
 
-    var pkg = new Package(root, {
-      extraDeps: {handlebars: 'handlebars-runtime'}
-    });
     var m = req.pathname.match(RE_SEAMODULE);
     if (m && m[0]) {
       pkg = pkg.dependencies[m[1]];
