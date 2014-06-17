@@ -85,6 +85,17 @@ function parse(root, opts, req, res, next) {
 
 function getFile(root, pathname) {
   var file = join(root, pathname);
+
+  if (file.slice(-1) === '/') {
+    if (exists(join(file, 'index.html'))) {
+      return join(file, 'index.html');
+    }
+    if (exists(join(file, 'index.htm'))) {
+      return join(file, 'index.htm');
+    }
+    return null;
+  }
+
   if (exists(file)) return file;
 
   if (path.extname(file) === '.js') {

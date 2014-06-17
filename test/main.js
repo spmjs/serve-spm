@@ -160,6 +160,15 @@ describe('serve spm', function() {
       });
     });
 
+    it('default index.html or index.htm', function(done) {
+      request('http://localhost:'+port+'/', function(err, res, body1) {
+        request('http://localhost:'+port+'/index.html', function(err, res, body2) {
+          body1.should.be.eql(body2);
+          done();
+        });
+      });
+    });
+
   });
 
 });
