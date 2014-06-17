@@ -14,6 +14,7 @@ var pipe = require('multipipe');
 var gulp = require('gulp');
 var less = require('less');
 var gulpless = require('gulp-less');
+var gulpif = require('gulp-if');
 
 var JS_PLUGINS = {
   '.tpl': gulpTransport.plugin.tplParser,
@@ -120,6 +121,11 @@ module.exports = function(root, opts) {
 
       return pipe(
         stream,
+        gulpif(/\.css$/, through.obj(function(file) {
+          var newCSS = parseCSS(file.contents.toString(), pkg);
+          file.contents = new Buffer(newCSS);
+          this.push(file);
+        })),
         plugin(args),
         through.obj(function(file) {
           end(file.contents, '.js');
