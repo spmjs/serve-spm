@@ -13,6 +13,7 @@ var through = require('through2');
 var pipe = require('multipipe');
 var gulp = require('gulp');
 var less = require('less');
+var gulpless = require('gulp-less');
 
 var JS_PLUGINS = {
   '.tpl': gulpTransport.plugin.tplParser,
@@ -93,8 +94,8 @@ module.exports = function(root, opts) {
         return next();
       }
 
-      // Remove .js
-      var newfile = file.replace(/\.js$/g, '');
+      var newfile = file.replace(/\.less\.js$/g, '.css.js');
+      newfile = newfile.replace(/\.js$/g, '');
 
       var plugin = JS_PLUGINS[path.extname(newfile)];
       if (!plugin) {
@@ -107,8 +108,18 @@ module.exports = function(root, opts) {
         idleading: './'
       };
 
+      var stream;
+      var _lessfile = newfile.replace(/\.css$/, '.less');
+      if (!fs.existsSync(newfile) && fs.existsSync(_lessfile)) {
+        stream = gulp.src(_lessfile).pipe(gulpless({
+          paths: [path.dirname(_lessfile)]
+        }));
+      } else {
+        stream = gulp.src(newfile);
+      }
+
       return pipe(
-        gulp.src(newfile),
+        stream,
         plugin(args),
         through.obj(function(file) {
           end(file.contents, '.js');

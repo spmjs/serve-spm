@@ -62,6 +62,20 @@ describe('serve spm', function() {
         done();
       });
     });
+
+    it('.css.js for less file', function(done) {
+      request('http://localhost:'+port+'/precompilers/a.css.js', function(err, res, body) {
+        body.should.be.eql('define(function(require, exports, module){\nseajs.importStyle(\'p {  color: green;}\');\n});\n');
+        done();
+      });
+    });
+
+    it('.less.js', function(done) {
+      request('http://localhost:'+port+'/precompilers/a.less.js', function(err, res, body) {
+        body.should.be.eql('define(function(require, exports, module){\nseajs.importStyle(\'p {  color: green;}\');\n});\n');
+        done();
+      });
+    });
   });
 
   describe('js', function() {
