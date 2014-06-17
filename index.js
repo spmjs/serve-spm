@@ -29,9 +29,7 @@ module.exports = function(root, opts) {
 };
 
 function parse(root, opts, req, res, next) {
-  var pkg = new Package(root, {
-    extraDeps: {handlebars: 'handlebars-runtime'}
-  });
+  var pkg = new Package(root);
 
   var url = req.url.toLowerCase();
   req = urlparse(url);
