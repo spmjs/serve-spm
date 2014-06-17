@@ -100,7 +100,7 @@ describe('serve spm', function() {
 
     it('css plugin', function(done) {
       request('http://localhost:'+port+'/plugins/plugin.css.js', function(err, res, body) {
-        body.should.be.eql('define(\"plugins/plugin.css.js\", [], function(require, exports, module){\nseajs.importStyle(\'body {background: #ffa;}\');\n});\n');
+        body.should.be.eql('define(function(require, exports, module){\nseajs.importStyle(\'body {background: #ffa;}\');\n});\n');
         done();
       });
     });
