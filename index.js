@@ -60,6 +60,8 @@ function parse(root, opts, req, res, next) {
 
   var useCss2jsParser = /\.css|\.less$/.test(file) &&
     /\.js$/.test(req.pathname);
+  var useJsParser = /\.js$/.test(file) &&
+    req.path.indexOf('?nowrap') === -1;
 
   return pipe(
     gulp.src(file),
@@ -67,7 +69,7 @@ function parse(root, opts, req, res, next) {
     gulpif(/\.css$/, cssParser(args)),
     gulpif(useCss2jsParser, css2jsParser(args)),
 
-    gulpif(/\.js$/, jsParser(args)),
+    gulpif(useJsParser, jsParser(args)),
 
     // Plugins
     gulpif(/\.tpl$/, tplParser(args)),

@@ -96,12 +96,12 @@ describe('serve spm', function() {
       });
     });
 
-    // it('dont wrap js if ?nowrap supplys', function(done) {
-    //   request('http://localhost:'+port+'/relative.js?nowrap', function(err, res, body) {
-    //     body.should.be.eql('\nmodule.exports = \'relative\';\n');
-    //     done();
-    //   });
-    // });
+    it('dont wrap js if ?nowrap supplys', function(done) {
+       request('http://localhost:'+port+'/relative.js?nowrap', function(err, res, body) {
+         body.should.be.eql('\nmodule.exports = \'relative\';\n');
+         done();
+       });
+    });
 
     it('js in package', function(done) {
       request('http://localhost:'+port+'/sea-modules/js-b/1.0.0/index.js', function(err, res, body) {
