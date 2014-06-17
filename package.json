@@ -30,6 +30,7 @@
     "css-imports": "^0.3.0",
     "father": "^0.6.13",
     "gulp": "^3.8.0",
+    "gulp-less": "^1.2.3",
     "gulp-transport": "^0.5.5",
     "less": "^1.7.1",
     "mime": "^1.2.11",
