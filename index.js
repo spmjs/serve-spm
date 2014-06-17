@@ -20,7 +20,7 @@ var JS_PLUGINS = {
   '.tpl': gulpTransport.plugin.tplParser,
   '.json': gulpTransport.plugin.jsonParser,
   '.handlebars': gulpTransport.plugin.handlebarsParser,
-  '.css': require('./plugins/css2js')
+  '.css': require('./parser/css2js')
 };
 var RE_SEAMODULE = /\/sea-modules\/(.+?)\//;
 
