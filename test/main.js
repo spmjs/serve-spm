@@ -60,7 +60,7 @@ describe('serve spm', function() {
   describe('less', function() {
     it('support less', function(done) {
       request('http://localhost:'+port+'/precompilers/index.css', function(err, res, body) {
-        body.should.be.eql('@import \'css-a\';\np {\n  color: green;\n}\na {\n  color: #5b83ad;\n}\n');
+        body.should.be.eql('@import \"/sea-modules/css-a/1.0.0/index.css\";\np {\n  color: green;\n}\na {\n  color: #5b83ad;\n}\n');
         done();
       });
     });
@@ -91,28 +91,28 @@ describe('serve spm', function() {
 
     it('wrap js', function(done) {
       request('http://localhost:'+port+'/relative.js', function(err, res, body) {
-        body.should.be.eql('define(function(require, exports, module) {\n\nmodule.exports = \'relative\';\n\n});');
+        body.should.be.eql('define(function(require, exports, module){\n\nmodule.exports = \'relative\';\n\n});\n');
         done();
       });
     });
 
-    it('dont wrap js if ?nowrap supplys', function(done) {
-      request('http://localhost:'+port+'/relative.js?nowrap', function(err, res, body) {
-        body.should.be.eql('\nmodule.exports = \'relative\';\n');
-        done();
-      });
-    });
+    // it('dont wrap js if ?nowrap supplys', function(done) {
+    //   request('http://localhost:'+port+'/relative.js?nowrap', function(err, res, body) {
+    //     body.should.be.eql('\nmodule.exports = \'relative\';\n');
+    //     done();
+    //   });
+    // });
 
     it('js in package', function(done) {
       request('http://localhost:'+port+'/sea-modules/js-b/1.0.0/index.js', function(err, res, body) {
-        body.should.be.eql('define(function(require, exports, module) {\n\nmodule.exports = \'b@1.0.0\';\n\n});');
+        body.should.be.eql('define(function(require, exports, module){\n\nmodule.exports = \'b@1.0.0\';\n\n});\n');
         done();
       });
     });
 
     it('js in package which require other package', function(done) {
       request('http://localhost:'+port+'/sea-modules/js-a/1.0.0/index.js', function(err, res, body) {
-        body.should.be.eql('define(function(require, exports, module) {\n\nvar plus = require(\'./plus\');\nvar b = require(\"sea-modules/js-b/2.0.0/index.js\");\n\nmodule.exports = \'a@1.0.0, \' + plus + b;\n\n});');
+        body.should.be.eql('define(function(require, exports, module){\n\nvar plus = require(\'./plus\');\nvar b = require(\"sea-modules/js-b/2.0.0/index.js\");\n\nmodule.exports = \'a@1.0.0, \' + plus + b;\n\n});\n');
         done();
       });
     });
@@ -130,21 +130,21 @@ describe('serve spm', function() {
 
     it('tpl plugin', function(done) {
       request('http://localhost:'+port+'/plugins/index.tpl.js', function(err, res, body) {
-        body.should.be.eql('define(\"plugins/index.tpl\", [], function(require, exports, module){\nmodule.exports=\'hello {{name}}\';\n});\n');
+        body.should.be.eql('define(function(require, exports, module){\nmodule.exports=\'hello {{name}}\';\n});\n');
         done();
       });
     });
 
     it('json plugin', function(done) {
       request('http://localhost:'+port+'/plugins/index.json.js', function(err, res, body) {
-        body.should.be.eql('define(\"plugins/index.json\", [], function(require, exports, module){\nmodule.exports ={\n  \"foo\": 1\n}\n\n});\n');
+        body.should.be.eql('define(function(require, exports, module){\nmodule.exports ={\n  \"foo\": 1\n}\n\n});\n');
         done();
       });
     });
 
     it('handlebars plugin', function(done) {
       request('http://localhost:'+port+'/plugins/index.handlebars.js', function(err, res, body) {
-        body.should.be.eql('define(\"plugins/index.handlebars\", [\"dist/cjs/handlebars.runtime\"], function(require, exports, module) {\nvar Handlebars = require(\"dist/cjs/handlebars.runtime\")[\"default\"];\nmodule.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {\n  this.compilerInfo = [4,\'>= 1.0.0\'];\nhelpers = this.merge(helpers, Handlebars.helpers); data = data || {};\n  \n\n\n  return \"todo\\n\";\n  });\n});\n');
+        body.should.be.eql('define(function(require, exports, module) {\nvar Handlebars = require(\"handlebars-runtime\")[\"default\"];\nmodule.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {\n  this.compilerInfo = [4,\'>= 1.0.0\'];\nhelpers = this.merge(helpers, Handlebars.helpers); data = data || {};\n  \n\n\n  return \"todo\\n\";\n  });\n});\n');
         done();
       });
     });

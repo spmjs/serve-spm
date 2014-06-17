@@ -1,9 +1,8 @@
 'use strict';
 
-var strip = require('strip-comments');
 var through = require('through2');
 
-module.exports = function css2jsParser(options) {
+module.exports = function tplParser(options) {
   return through.obj(function(file) {
     file = parser(file, options);
     this.push(file);
@@ -18,21 +17,10 @@ function parser(file) {
 
   file.contents = Buffer.concat([
     new Buffer(headerTpl),
-    new Buffer('seajs.importStyle(\''),
-    new Buffer(css2js(code)),
-    new Buffer('\');'),
+    new Buffer('module.exports=\''),
+    new Buffer(code.replace(/\n|\r/g, '').replace(/'/g, '"')),
+    new Buffer('\';'),
     new Buffer(footerTpl)
   ]);
   return file;
-}
-
-function css2js(code) {
-
-  code = strip
-    .block(code)
-    .replace(/\n|\r/g, '')
-    .replace(/\\/g, '\\\\')
-    .replace(/'/g, '"');
-
-  return code;
 }

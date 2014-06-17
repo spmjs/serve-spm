@@ -1,16 +1,17 @@
-
 var path = require('path');
-var gulpTransport = require('gulp-transport');
-var createStream = gulpTransport.createStream;
-var util = gulpTransport.util;
+var util = require('../util');
 var requires = require('requires');
 var format = require('util').format;
+var through = require('through2');
 
 var headerTpl = 'define(function(require, exports, module){\n';
 var footerTpl = '\n});\n';
 
 module.exports = function jsParser(options) {
-  return createStream(options, 'js', parser);
+  return through.obj(function(file) {
+    file = parser(file, options);
+    this.push(file);
+  });
 };
 
 function parser(file, options) {

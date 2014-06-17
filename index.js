@@ -6,19 +6,20 @@ var read = fs.readFileSync;
 var mime = require('mime');
 var urlparse = require('url').parse;
 var Package = require('father').SpmPackage;
-var gulpTransport = require('gulp-transport');
 var through = require('through2');
 var pipe = require('multipipe');
 var gulp = require('gulp');
 var less = require('gulp-less');
 var gulpif = require('gulp-if');
-var util = require('gulp-transport').util;
+var util = require('./util');
 var rename = require('rename');
 
-var plugin = gulpTransport.plugin;
 var cssParser = require('./parser/css');
 var css2jsParser = require('./parser/css2js');
 var jsParser = require('./parser/js');
+var tplParser = require('./parser/tpl');
+var jsonParser = require('./parser/json');
+var handlebarsParser = require('./parser/handlebars');
 
 module.exports = function(root, opts) {
   return function() {
@@ -48,7 +49,7 @@ function parse(root, opts, req, res, next) {
   }
 
   var file = getFile(root, req.pathname);
-  console.log('  file: %s', file);
+  // console.log('  file: %s', file);
   if (!file) {
     return next();
   }
@@ -59,7 +60,7 @@ function parse(root, opts, req, res, next) {
     idleading: './'
   };
 
-  var useCss2jsParser = /\.css$/.test(file) &&
+  var useCss2jsParser = /\.css|\.less$/.test(file) &&
     /\.js$/.test(req.pathname);
 
   return pipe(
@@ -71,9 +72,9 @@ function parse(root, opts, req, res, next) {
     gulpif(/\.js$/, jsParser(args)),
 
     // Plugins
-    gulpif(/\.tpl$/, plugin.tplParser(args)),
-    gulpif(/\.json$/, plugin.jsonParser(args)),
-    gulpif(/\.handlebars$/, plugin.handlebarsParser(args)),
+    gulpif(/\.tpl$/, tplParser(args)),
+    gulpif(/\.json$/, jsonParser(args)),
+    gulpif(/\.handlebars$/, handlebarsParser(args)),
 
     // Send response
     through.obj(function(file) {

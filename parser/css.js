@@ -1,13 +1,9 @@
-
-var gulpTransport = require('gulp-transport');
-var createStream = gulpTransport.createStream;
-var util = gulpTransport.util;
+var util = require('../util');
 var imports = require('css-imports');
 var format = require('util').format;
 var through = require('through2');
 
 module.exports = function cssParser(options) {
-  // return createStream(options, 'css', parser);
   return through.obj(function(file) {
     file = parser(file, options);
     this.push(file);
