@@ -55,7 +55,9 @@ describe('serve spm', function() {
         done();
       });
     });
+  });
 
+  describe('less', function() {
     it('support less', function(done) {
       request('http://localhost:'+port+'/precompilers/index.css', function(err, res, body) {
         body.should.be.eql('@import \'css-a\';\np {\n  color: green;\n}\na {\n  color: #5b83ad;\n}\n');
@@ -73,6 +75,13 @@ describe('serve spm', function() {
     it('.less.js', function(done) {
       request('http://localhost:'+port+'/precompilers/a.less.js', function(err, res, body) {
         body.should.be.eql('define(function(require, exports, module){\nseajs.importStyle(\'p {  color: green;}\');\n});\n');
+        done();
+      });
+    });
+
+    it('.less.js which import other packages', function(done) {
+      request('http://localhost:'+port+'/precompilers/index.less.js', function(err, res, body) {
+        body.should.be.eql('define(function(require, exports, module){\nseajs.importStyle(\'@import \"/sea-modules/css-a/1.0.0/index.css\";p {  color: green;}a {  color: #5b83ad;}\');\n});\n');
         done();
       });
     });
