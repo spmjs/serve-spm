@@ -74,17 +74,19 @@ module.exports = function(root, opts) {
         if (extname === '.css') {
           var lessfile = file.replace(/\.css$/, '.less');
           if (fs.existsSync(lessfile)) {
-            less.render(read(lessfile, 'utf-8'), {
+
+            // Precompile less
+            return less.render(read(lessfile, 'utf-8'), {
               paths: [path.dirname(lessfile)]
             }, function(err, css) {
               if (err) {
-                console.error(err);
+                console.error('less compile error: %s in file %s, line no. %s',
+                  err.message, err.filename, err.line);
                 next();
               } else {
                 end(css, '.css');
               }
             });
-            return;
           }
         }
 
@@ -92,7 +94,7 @@ module.exports = function(root, opts) {
       }
 
       // Remove .js
-      var newfile = file.slice(0, -3);
+      var newfile = file.replace(/\.js$/g, '');
 
       var plugin = JS_PLUGINS[path.extname(newfile)];
       if (!plugin) {
