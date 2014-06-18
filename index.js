@@ -30,6 +30,8 @@ module.exports = function(root, opts) {
 
 function parse(root, opts, req, res, next) {
   var pkg = new Package(root);
+  var name = pkg.name;
+  var version = pkg.version;
 
   var url = req.url.toLowerCase();
   req = urlparse(url);
@@ -46,10 +48,10 @@ function parse(root, opts, req, res, next) {
     return end(data, res, '.js');
   }
 
-  var file = getFile(root, req.pathname);
+  var file = getFile(root, req.pathname, name, version, opts);
   // console.log('  file: %s', file);
   if (!file) {
-    return next();
+    return next && next();
   }
 
   var args = {
@@ -83,7 +85,15 @@ function parse(root, opts, req, res, next) {
   );
 }
 
-function getFile(root, pathname) {
+function getFile(root, pathname, name, version, opts) {
+
+  if (opts.dist) {
+    var distTpl = opts.distTpl || '/{{dist}}/{{name}}/{{version}}';
+    var data = { dist:opts.dist, name:name, version:version };
+    var id = util.template(distTpl, data).replace(/^\/+/, '/');
+    pathname = pathname.replace(id, '');
+  }
+
   var file = join(root, pathname);
 
   if (file.slice(-1) === '/') {

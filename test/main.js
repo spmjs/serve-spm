@@ -10,7 +10,9 @@ describe('serve spm', function() {
 
   before(function(done) {
     var publicPath = join(__dirname, './fixtures/site/');
-    server = http.createServer(serveSPM(publicPath));
+    server = http.createServer(serveSPM(publicPath, {
+      dist: 'assets'
+    }));
     server.listen(port, done);
   });
 
@@ -146,6 +148,19 @@ describe('serve spm', function() {
       request('http://localhost:'+port+'/plugins/index.handlebars.js', function(err, res, body) {
         body.should.be.eql('define(function(require, exports, module) {\nvar Handlebars = require(\"handlebars-runtime\")[\"default\"];\nmodule.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {\n  this.compilerInfo = [4,\'>= 1.0.0\'];\nhelpers = this.merge(helpers, Handlebars.helpers); data = data || {};\n  \n\n\n  return \"todo\\n\";\n  });\n});\n');
         done();
+      });
+    });
+
+  });
+
+  describe('dist', function() {
+
+    it('proxy dist', function(done) {
+      request('http://localhost:'+port+'/assets/serve-spm-test/0.1.0/index.js', function(err, res, body1) {
+        request('http://localhost:'+port+'/index.js', function(err, res, body2) {
+          body1.should.be.eql(body2);
+          done();
+        });
       });
     });
 

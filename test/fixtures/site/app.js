@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 
 app.use(require('../../../index')(__dirname, {
-  proxy: ''
+  dist: '/'
 }));
 
 app.listen('3000');
