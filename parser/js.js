@@ -3,6 +3,7 @@ var util = require('../util');
 var requires = require('requires');
 var format = require('util').format;
 var through = require('through2');
+var rename = require('rename');
 
 var headerTpl = 'define(function(require, exports, module){\n';
 var footerTpl = '\n});\n';
@@ -29,10 +30,9 @@ function transportFile(file, options) {
     if (util.isRelative(dep)) {
       var extname = path.extname(dep);
 
-      // Add .js suffix for css and less,
-      // because css files can be request directly or from js files
-      if (['.css', '.less'].indexOf(extname) > -1) {
-        return format('require("%s.js")', dep);
+      // .less -> .css
+      if (extname === '.less') {
+        return format('require("%s")', rename(dep, {extname:'.css'}));
       }
 
       return item.string;

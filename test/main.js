@@ -105,6 +105,13 @@ describe('serve spm', function() {
        });
     });
 
+    it('require css or less in js', function(done) {
+        request('http://localhost:'+port+'/require-css.js', function(err, res, body) {
+          body.should.be.eql('define(function(require, exports, module){\nrequire(\'./relative.css\');\nrequire(\"./precompilers/a.css\");\n});\n');
+          done();
+        });
+    });
+
     it('js in package', function(done) {
       request('http://localhost:'+port+'/sea-modules/js-b/1.0.0/index.js', function(err, res, body) {
         body.should.be.eql('define(function(require, exports, module){\n\nmodule.exports = \'b@1.0.0\';\n\n});\n');
