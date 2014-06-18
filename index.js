@@ -37,9 +37,13 @@ function parse(root, opts, req, res, next) {
   req = urlparse(url);
 
   // Redirect pkg when request with /sea-modules
-  var m = req.pathname.match(/\/sea-modules\/(.+?)\//);
+  var m = req.pathname.match(/\/sea-modules\/(.+?)\/(.+?)\//);
   if (m && m[0]) {
-    pkg = pkg.dependencies[m[1]];
+    pkg = pkg.get(m[1] + '@' + m[2]);
+  }
+
+  if (!pkg) {
+    return next && next();
   }
 
   // Proxy handlebars-runtime request

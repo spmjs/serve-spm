@@ -37,9 +37,9 @@ describe('serve spm', function() {
       });
     });
 
-    it('css in package which is main', function(done) {
-      request('http://localhost:'+port+'/sea-modules/css-b/1.0.0/index.css', function(err, res, body) {
-        body.should.be.eql('\nb{color:black;}\n');
+    it('css in package which is not in root package', function(done) {
+      request('http://localhost:'+port+'/sea-modules/css-b/2.0.0/index.css', function(err, res, body) {
+        body.should.be.eql('\nb{color:green;}\n');
         done();
       });
     });
