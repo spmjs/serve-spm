@@ -1,6 +1,7 @@
 # Serve SPM
 
 [![Build Status](https://travis-ci.org/spmjs/serve-spm.png)](https://travis-ci.org/spmjs/serve-spm)
+[![Coverage Status](https://coveralls.io/repos/spmjs/serve-spm/badge.png?branch=master)](https://coveralls.io/r/spmjs/serve-spm?branch=master)
 
 spm@3x middleware.
 
