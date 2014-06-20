@@ -1,9 +1,10 @@
 var path = require('path');
 var util = require('../util');
-var requires = require('requires');
+var requires = require('searequire');
 var format = require('util').format;
 var through = require('through2');
 var rename = require('rename');
+var PluginError = require('gulp-util').PluginError;
 
 var headerTpl = 'define(function(require, exports, module){\n';
 var footerTpl = '\n});\n';
@@ -40,6 +41,9 @@ function transportFile(file, options) {
 
     else {
       var p = options.pkg.dependencies[dep];
+      if (!p) {
+        throw new PluginError('jsParser', 'package `'+dep+'` not found');
+      }
       return format('require("sea-modules/%s/%s/%s")',
         p.name, p.version, p.main);
     }
