@@ -126,6 +126,13 @@ describe('serve spm', function() {
       });
     });
 
+    it('dont resolve package that cant be found', function(done) {
+      request('http://localhost:'+port+'/pkg-not-found.js', function(err, res, body) {
+        body.should.be.eql('define(function(require, exports, module){\nrequire(\'bar\');\n\n});\n');
+        done();
+      });
+    });
+
   });
 
   describe('plugins', function() {
