@@ -3,9 +3,9 @@
 var strip = require('strip-comments');
 var through = require('through2');
 
-module.exports = function css2jsParser(options) {
+module.exports = function css2jsParser() {
   return through.obj(function(file) {
-    file = parser(file, options);
+    file = parser(file);
     this.push(file);
   });
 };
