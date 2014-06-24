@@ -15,6 +15,7 @@ var util = require('./util');
 var rename = require('rename');
 var glob = require('glob');
 var minimist = require('minimist');
+var format = require('util').format;
 
 var cssParser = require('./parser/css');
 var css2jsParser = require('./parser/css2js');
@@ -86,18 +87,19 @@ function parse(root, opts, req, res, next) {
 
     // Send response
     through.obj(function(file) {
+      var data = file.contents;
       var entries = getEntries(pkg);
       var buildArgs = parsePkgArgs(pkg.dest);
       var ext = path.extname(file.path);
-
-      var data = file.contents;
 
       // add sea mini for entry js files in standalone mode
       if (ext === '.js' &&
         buildArgs.include === 'standalone' &&
         entries.indexOf(file.path) > -1) {
-        var seajs = read(join(__dirname, './sea-mini.js'));
-        data = Buffer.concat([seajs, data]);
+        data = data.toString();
+        var seajs = read(join(__dirname, './sea.js'), 'utf-8');
+        var init = new Buffer('\n/*! Sea.js Init */\nseajs.use(\''+url+'\');\n');
+        data = seajs + data + init;
       }
 
       end(data, res, ext);
