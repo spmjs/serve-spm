@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "css-imports": "^0.3.0",
-    "father2": "^0.6.13",
+    "father": "^0.6.14",
     "gulp": "^3.8.0",
     "gulp-if": "^1.2.1",
     "gulp-less": "^1.2.3",
