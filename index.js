@@ -13,6 +13,8 @@ var less = require('gulp-less');
 var gulpif = require('gulp-if');
 var util = require('./util');
 var rename = require('rename');
+var glob = require('glob');
+var minimist = require('minimist');
 
 var cssParser = require('./parser/css');
 var css2jsParser = require('./parser/css2js');
@@ -84,9 +86,52 @@ function parse(root, opts, req, res, next) {
 
     // Send response
     through.obj(function(file) {
-      end(file.contents, res, path.extname(file.path));
+      var entries = getEntries(pkg);
+      var buildArgs = parsePkgArgs(pkg.dest);
+      var data = file.contents.toString();
+
+      if (buildArgs.include === 'standalone' &&
+        entries.indexOf(file.path) > -1) {
+        var seajs = read(join(__dirname, './sea-mini.js'));
+        data = seajs + data;
+      }
+
+      end(data, res, path.extname(file.path));
     })
   );
+}
+
+function getEntries(pkg) {
+  var entries = [];
+
+  // main
+  entries.push(join(pkg.dest, pkg.main));
+
+  // outputs
+  if (pkg.output) {
+    pkg.output.forEach(function(output) {
+      var items = glob.sync(output, {cwd:pkg.dest});
+      items.forEach(function(item) {
+        entries.push(join(pkg.dest, item));
+      });
+    });
+  }
+
+  return entries;
+}
+
+function parsePkgArgs(cwd) {
+  try {
+    var pkg = require(join(cwd, 'package.json'));
+  } catch(e) {
+    throw new Error('package.json not found');
+  }
+  if (!(pkg.spm && pkg.spm.buildArgs)) return {};
+  var args = minimist(pkg.spm.buildArgs.split(/\s+/));
+  args.ignore = args.ignore || '';
+  args.ignore = args.ignore.split(',');
+  delete args['_'];
+  return args;
 }
 
 function getFile(root, pathname, name, version, opts) {
