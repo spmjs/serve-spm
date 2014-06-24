@@ -133,6 +133,13 @@ describe('serve spm', function() {
       });
     });
 
+    it('add seajs mini for standalone', function(done) {
+      request('http://localhost:'+port+'/main.js', function(err, res, body) {
+        body.should.be.containEql('seajs.org');
+        done();
+      });
+    });
+
   });
 
   describe('plugins', function() {
