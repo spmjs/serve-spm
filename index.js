@@ -89,14 +89,17 @@ function parse(root, opts, req, res, next) {
       var entries = getEntries(pkg);
       var buildArgs = parsePkgArgs(pkg.dest);
       var data = file.contents.toString();
+      var ext = path.extname(file.path);
 
-      if (buildArgs.include === 'standalone' &&
+      // add sea mini for entry js files in standalone mode
+      if (ext === '.js' &&
+        buildArgs.include === 'standalone' &&
         entries.indexOf(file.path) > -1) {
         var seajs = read(join(__dirname, './sea-mini.js'));
         data = seajs + data;
       }
 
-      end(data, res, path.extname(file.path));
+      end(data, res, ext);
     })
   );
 }
