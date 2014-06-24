@@ -15,7 +15,6 @@ var util = require('./util');
 var rename = require('rename');
 var glob = require('glob');
 var minimist = require('minimist');
-var format = require('util').format;
 
 var cssParser = require('./parser/css');
 var css2jsParser = require('./parser/css2js');
