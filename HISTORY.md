@@ -2,6 +2,10 @@
 
 ---
 
+## 0.3.4
+
+- fix bug in standalone mode
+
 ## 0.3.3
 
 - add seajs-mini for main and output files in standalone mode
