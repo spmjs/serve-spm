@@ -1,6 +1,6 @@
 {
   "name": "serve-spm",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Serve spm files",
   "main": "index.js",
   "scripts": {
