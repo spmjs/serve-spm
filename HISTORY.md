@@ -2,6 +2,10 @@
 
 ---
 
+## 0.3.5
+
+- upgrade father to 0.7.x
+
 ## 0.3.4
 
 - fix bug in standalone mode
