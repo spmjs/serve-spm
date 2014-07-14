@@ -201,7 +201,7 @@ function end(data, res, extname) {
   if (['.tpl', '.json', '.handlebars'].indexOf(extname) > -1) {
     extname = '.js';
   }
-  res.setHeader('Content-Type', mime.lookup('.js'));
+  res.setHeader('Content-Type', mime.lookup(extname));
   res.writeHead(200);
   res.end(data);
 }
