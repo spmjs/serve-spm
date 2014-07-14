@@ -2,6 +2,10 @@
 
 ---
 
+## 0.3.7
+
+- add cache
+
 ## 0.3.5
 
 - upgrade father to 0.7.x
