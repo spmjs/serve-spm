@@ -35,6 +35,7 @@ function parse(root, opts, req, res, next) {
   var name = pkg.name;
   var version = pkg.version;
 
+  var _req = req;
   var url = req.url.toLowerCase();
   req = urlparse(url);
 
@@ -58,6 +59,18 @@ function parse(root, opts, req, res, next) {
   // console.log('  file: %s', file);
   if (!file) {
     return next && next();
+  }
+
+  // Return 304 if file is not modified.
+  var fileModified = new Date(fs.statSync(file).mtime);
+  res.setHeader('Last-Modified', fileModified);
+  if (_req.headers['if-modified-since']) {
+    var reqModified = new Date(_req.headers['if-modified-since']);
+    if (fileModified <= reqModified) {
+      res.writeHead(304);
+      res.end('');
+      return;
+    }
   }
 
   var args = {
@@ -188,7 +201,7 @@ function end(data, res, extname) {
   if (['.tpl', '.json', '.handlebars'].indexOf(extname) > -1) {
     extname = '.js';
   }
-  res.setHeader('Content-Type', mime.lookup(extname));
+  res.setHeader('Content-Type', mime.lookup('.js'));
   res.writeHead(200);
   res.end(data);
 }
