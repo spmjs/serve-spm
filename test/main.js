@@ -105,6 +105,13 @@ describe('serve spm', function() {
        });
     });
 
+    it('dont wrap json if ?nowrap supplys', function(done) {
+       request('http://localhost:'+port+'/plugins/index.json?nowrap', function(err, res, body) {
+          body.should.be.eql('{\n  \"foo\": 1\n}\n');
+          done();
+       });
+    });
+
     it('require css or less in js', function(done) {
         request('http://localhost:'+port+'/require-css.js', function(err, res, body) {
           body.should.be.eql('define(function(require, exports, module){\nrequire(\'./relative.css\');\nrequire(\"./precompilers/a.css\");\n});\n');
