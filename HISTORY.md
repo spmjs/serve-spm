@@ -2,6 +2,14 @@
 
 ---
 
+## 0.3.9
+
+- remove cache temporary, [problem](https://github.com/spmjs/serve-spm/issues/1#issuecomment-51144678)
+
+## 0.3.8
+
+- add nowrap support for json, handlebars and tpl
+
 ## 0.3.7
 
 - add cache
