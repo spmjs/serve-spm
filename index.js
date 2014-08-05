@@ -85,7 +85,8 @@ function parse(root, opts, req, res, next) {
   var useParser = req.path.indexOf('?nowrap') === -1;
 
   if (opts.log) {
-    console.log('>> ServeSPM %s', req.pathname);
+    console.log('>> ServeSPM %s < ./%s', req.pathname,
+      path.relative(process.cwd(), file));
   }
 
   return pipe(
