@@ -2,6 +2,10 @@
 
 ---
 
+## 0.3.10
+
+- add log opts to enable request log
+
 ## 0.3.9
 
 - remove cache temporary, [problem](https://github.com/spmjs/serve-spm/issues/1#issuecomment-51144678)

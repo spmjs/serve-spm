@@ -13,7 +13,9 @@ var serveSPM = require('serve-spm');
 var join = require('path').join;
 
 var app = express();
-app.use(serveSPM(join(__dirname, 'public')));
+app.use(serveSPM(join(__dirname, 'public'), {
+  log: true
+}));
 ```
 
 ## LICENSE

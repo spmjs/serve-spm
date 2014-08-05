@@ -84,6 +84,10 @@ function parse(root, opts, req, res, next) {
 
   var useParser = req.path.indexOf('?nowrap') === -1;
 
+  if (opts.log) {
+    console.log('>> ServeSPM %s', req.pathname);
+  }
+
   return pipe(
     gulp.src(file),
 
