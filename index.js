@@ -62,16 +62,16 @@ function parse(root, opts, req, res, next) {
   }
 
   // Return 304 if file is not modified.
-  var fileModified = new Date(fs.statSync(file).mtime);
-  res.setHeader('Last-Modified', fileModified);
-  if (_req.headers['if-modified-since']) {
-    var reqModified = new Date(_req.headers['if-modified-since']);
-    if (fileModified <= reqModified) {
-      res.writeHead(304);
-      res.end('');
-      return;
-    }
-  }
+  // var fileModified = new Date(fs.statSync(file).mtime);
+  // res.setHeader('Last-Modified', fileModified);
+  // if (_req.headers['if-modified-since']) {
+  //   var reqModified = new Date(_req.headers['if-modified-since']);
+  //   if (fileModified <= reqModified) {
+  //     res.writeHead(304);
+  //     res.end('');
+  //     return;
+  //   }
+  // }
 
   var args = {
     pkg: pkg,
