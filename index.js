@@ -62,16 +62,24 @@ function parse(root, opts, req, res, next) {
   }
 
   // Return 304 if file is not modified.
-  // var fileModified = new Date(fs.statSync(file).mtime);
-  // res.setHeader('Last-Modified', fileModified);
-  // if (_req.headers['if-modified-since']) {
-  //   var reqModified = new Date(_req.headers['if-modified-since']);
-  //   if (fileModified <= reqModified) {
-  //     res.writeHead(304);
-  //     res.end('');
-  //     return;
-  //   }
-  // }
+  var fileModified = new Date(fs.statSync(file).mtime);
+  
+  // package.json can also affect transport result
+  // https://github.com/spmjs/serve-spm/issues/1#issuecomment-51213714
+  var pkgFileModified = new Date(fs.statSync(join(root, 'package.json')).mtime);
+  if (pkgFileModified > fileModified) {
+    fileModified = pkgFileModified;
+  }
+
+  res.setHeader('Last-Modified', fileModified);
+  if (_req.headers['if-modified-since']) {
+    var reqModified = new Date(_req.headers['if-modified-since']);
+    if (fileModified <= reqModified) {
+      res.writeHead(304);
+      res.end('');
+      return;
+    }
+  }
 
   var args = {
     pkg: pkg,
