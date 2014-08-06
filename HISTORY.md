@@ -2,6 +2,10 @@
 
 ---
 
+## 0.3.11
+
+- add cache again, :sweat_smile:
+
 ## 0.3.10
 
 - add log opts to enable request log
