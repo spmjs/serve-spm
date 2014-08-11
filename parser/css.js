@@ -2,6 +2,7 @@ var util = require('../util');
 var imports = require('css-imports');
 var format = require('util').format;
 var through = require('through2');
+var spmrc = require('spmrc');
 
 module.exports = function cssParser(options) {
   return through.obj(function(file) {
@@ -25,8 +26,8 @@ function transportFile(file, pkg) {
 
     else {
       var p = pkg.dependencies[dep];
-      return format('@import "/sea-modules/%s/%s/%s";',
-        p.name, p.version, p.main);
+      return format('@import "/%s/%s/%s/%s";',
+        spmrc.get('install.path'), p.name, p.version, p.main);
     }
   });
 }

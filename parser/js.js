@@ -4,6 +4,7 @@ var requires = require('searequire');
 var format = require('util').format;
 var through = require('through2');
 var rename = require('rename');
+var spmrc = require('spmrc');
 
 var headerTpl = 'define(function(require, exports, module){\n';
 var footerTpl = '\n});\n';
@@ -41,8 +42,8 @@ function transportFile(file, options) {
     else {
       var p = options.pkg.dependencies[dep];
       if (!p) return item.string;
-      return format('require("sea-modules/%s/%s/%s")',
-        p.name, p.version, p.main);
+      return format('require("%s/%s/%s/%s")',
+        spmrc.get('install.path'), p.name, p.version, p.main);
     }
   });
 }

@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "css-imports": "^0.3.0",
-    "father": "^0.7.2",
+    "father": "^0.8.7",
     "glob": "^4.0.2",
     "gulp": "^3.8.0",
     "gulp-if": "^1.2.1",
@@ -41,6 +41,7 @@
     "multipipe": "^0.1.1",
     "rename": "^0.2.3",
     "searequire": "^1.2.0",
+    "spmrc": "^1.2.0",
     "strip-comments": "^0.1.6",
     "through2": "^0.5.1",
     "url": "^0.10.1"

@@ -6,6 +6,7 @@ var read = fs.readFileSync;
 var mime = require('mime');
 var urlparse = require('url').parse;
 var Package = require('father').SpmPackage;
+var spmrc = require('spmrc');
 var through = require('through2');
 var pipe = require('multipipe');
 var gulp = require('gulp');
@@ -31,7 +32,9 @@ module.exports = function(root, opts) {
 };
 
 function parse(root, opts, req, res, next) {
-  var pkg = new Package(root);
+  var pkg = new Package(root, {
+    moduleDir: spmrc.get('install.path')
+  });
   var name = pkg.name;
   var version = pkg.version;
 
@@ -39,8 +42,8 @@ function parse(root, opts, req, res, next) {
   var url = req.url.toLowerCase();
   req = urlparse(url);
 
-  // Redirect pkg when request with /sea-modules
-  var m = req.pathname.match(/\/sea-modules\/(.+?)\/(.+?)\//);
+  // Redirect pkg when request with modules
+  var m = req.pathname.match(/\/spm_modules\/(.+?)\/(.+?)\//);
   if (m && m[0]) {
     pkg = pkg.get(m[1] + '@' + m[2]);
   }

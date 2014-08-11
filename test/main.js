@@ -32,27 +32,27 @@ describe('serve spm', function() {
 
     it('css with relative and package imports', function(done) {
       request('http://localhost:'+port+'/index.css', function(err, res, body) {
-        body.should.be.eql('\n@import \"/sea-modules/css-a/1.0.0/index.css\";\n@import \"./relative.css\";\na{color:red;}\n');
+        body.should.be.eql('\n@import \"/spm_modules/css-a/1.0.0/index.css\";\n@import \"./relative.css\";\na{color:red;}\n');
         done();
       });
     });
 
     it('css in package which is not in root package', function(done) {
-      request('http://localhost:'+port+'/sea-modules/css-b/2.0.0/index.css', function(err, res, body) {
+      request('http://localhost:'+port+'/spm_modules/css-b/2.0.0/index.css', function(err, res, body) {
         body.should.be.eql('\nb{color:green;}\n');
         done();
       });
     });
 
     it('css in package which import other css packages', function(done) {
-      request('http://localhost:'+port+'/sea-modules/css-a/1.0.0/index.css', function(err, res, body) {
-        body.should.be.eql('\n@import \"/sea-modules/css-b/2.0.0/index.css\";\n@import \"./plus.css\";\n\na{color:red;}\n');
+      request('http://localhost:'+port+'/spm_modules/css-a/1.0.0/index.css', function(err, res, body) {
+        body.should.be.eql('\n@import \"/spm_modules/css-b/2.0.0/index.css\";\n@import \"./plus.css\";\n\na{color:red;}\n');
         done();
       });
     });
 
     it('css in package which is not main', function(done) {
-      request('http://localhost:'+port+'/sea-modules/css-a/1.0.0/plus.css', function(err, res, body) {
+      request('http://localhost:'+port+'/spm_modules/css-a/1.0.0/plus.css', function(err, res, body) {
         body.should.be.eql('\np{color:green;}\n');
         done();
       });
@@ -62,7 +62,7 @@ describe('serve spm', function() {
   describe('less', function() {
     it('support less', function(done) {
       request('http://localhost:'+port+'/precompilers/index.css', function(err, res, body) {
-        body.should.be.eql('@import \"/sea-modules/css-a/1.0.0/index.css\";\np {\n  color: green;\n}\na {\n  color: #5b83ad;\n}\n');
+        body.should.be.eql('@import \"/spm_modules/css-a/1.0.0/index.css\";\np {\n  color: green;\n}\na {\n  color: #5b83ad;\n}\n');
         done();
       });
     });
@@ -83,7 +83,7 @@ describe('serve spm', function() {
 
     it('.less.js which import other packages', function(done) {
       request('http://localhost:'+port+'/precompilers/index.less.js', function(err, res, body) {
-        body.should.be.eql('define(function(require, exports, module){\nseajs.importStyle(\'@import \"/sea-modules/css-a/1.0.0/index.css\";p {  color: green;}a {  color: #5b83ad;}\');\n});\n');
+        body.should.be.eql('define(function(require, exports, module){\nseajs.importStyle(\'@import \"/spm_modules/css-a/1.0.0/index.css\";p {  color: green;}a {  color: #5b83ad;}\');\n});\n');
         done();
       });
     });
@@ -120,15 +120,15 @@ describe('serve spm', function() {
     });
 
     it('js in package', function(done) {
-      request('http://localhost:'+port+'/sea-modules/js-b/1.0.0/index.js', function(err, res, body) {
+      request('http://localhost:'+port+'/spm_modules/js-b/1.0.0/index.js', function(err, res, body) {
         body.should.be.eql('define(function(require, exports, module){\n\nmodule.exports = \'b@1.0.0\';\n\n});\n');
         done();
       });
     });
 
     it('js in package which require other package', function(done) {
-      request('http://localhost:'+port+'/sea-modules/js-a/1.0.0/index.js', function(err, res, body) {
-        body.should.be.eql('define(function(require, exports, module){\n\nvar plus = require(\'./plus\');\nvar b = require(\"sea-modules/js-b/2.0.0/index.js\");\n\nmodule.exports = \'a@1.0.0, \' + plus + b;\n\n});\n');
+      request('http://localhost:'+port+'/spm_modules/js-a/1.0.0/index.js', function(err, res, body) {
+        body.should.be.eql('define(function(require, exports, module){\n\nvar plus = require(\'./plus\');\nvar b = require(\"spm_modules/js-b/2.0.0/index.js\");\n\nmodule.exports = \'a@1.0.0, \' + plus + b;\n\n});\n');
         done();
       });
     });
