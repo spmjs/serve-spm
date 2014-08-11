@@ -2,6 +2,10 @@
 
 ---
 
+## 0.4.0
+
+- sea-modules to spm_modules
+
 ## 0.3.11
 
 - add cache again, :sweat_smile:
