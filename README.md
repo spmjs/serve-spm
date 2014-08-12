@@ -23,7 +23,7 @@ app.use(serveSPM(pkgRoot, {
 
 ### log
 
-Enable log for requests.
+Enable log for requests, default `false`.
 
 ## LICENSE
 

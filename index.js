@@ -6,7 +6,9 @@ var pipe = require('multipipe');
 var gulp = require('gulp');
 var less = require('gulp-less');
 var gulpif = require('gulp-if');
+var coffee = require('gulp-coffee');
 var mime = require('mime');
+var extend = require('extend');
 
 var cssParser = require('./parser/css');
 var css2jsParser = require('./parser/css2js');
@@ -32,12 +34,12 @@ function parse(root, opts, req, res, next) {
     res.end('');
   };
 
-  var parser = new Parser({
+  var parser = new Parser(extend({
     root: root,
     req: urlparse(req.url.toLowerCase()),
     headers: req.headers,
     pkg: util.getPkg(root)
-  });
+  }, opts));
 
   // is dep package, but not found
   if (!parser.pkg) {
@@ -86,6 +88,7 @@ function parse(root, opts, req, res, next) {
     gulpif(/\.less$/, less({ paths: [path.dirname(file)] })),
     gulpif(/\.css$/, cssParser(args)),
     gulpif(useCss2jsParser, css2jsParser(args)),
+    gulpif(/\.coffee$/, coffee({bare: true})),
     gulpif(/\.js$/, jsParser(args)),
     gulpif(/\.tpl$/, tplParser(args)),
     gulpif(/\.json$/, jsonParser(args)),
