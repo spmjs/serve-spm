@@ -1,8 +1,8 @@
 # Serve SPM
 
 [![NPM version](https://img.shields.io/npm/v/serve-spm.svg?style=flat)](https://npmjs.org/package/serve-spm)
-[![Build Status](https://travis-ci.org/spmjs/serve-spm.png)](https://travis-ci.org/spmjs/serve-spm)
-[![Coverage Status](https://coveralls.io/repos/spmjs/serve-spm/badge.png?branch=master)](https://coveralls.io/r/spmjs/serve-spm?branch=master)
+[![Build Status](https://img.shields.io/travis/spmjs/serve-spm.svg?style=flat)](https://travis-ci.org/spmjs/serve-spm)
+[![Coverage Status](https://img.shields.io/coveralls/spmjs/serve-spm.svg?style=flat)](https://coveralls.io/r/spmjs/serve-spm)
 [![NPM downloads](http://img.shields.io/npm/dm/serve-spm.svg?style=flat)](https://npmjs.org/package/serve-spm)
 
 SPM middleware for debug.
