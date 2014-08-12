@@ -67,7 +67,7 @@ Parser.prototype.getFile = function() {
     if (map(join(root, moduleDir, pathname))) return file;
   }
 
-  // ^handlebars-runtime.js, ^/dist/cjs/handlebars.runtime.js
+  // ^handlebars-runtime.js, ^/dist/cjs/handlebars.runtime.js -> hanelebars.runtime.js
   if (pathname === '/dist/cjs/handlebars.runtime.js' ||
     pathname === '/handlebars-runtime.js') {
     this.noWrap = true;

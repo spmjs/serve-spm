@@ -93,7 +93,7 @@ function parse(root, opts, req, res, next) {
     gulpif(/\.tpl$/, tplParser(args)),
     gulpif(/\.json$/, jsonParser(args)),
     gulpif(/\.handlebars$/, handlebarsParser(args)),
-    gulpif(useStandalone, standalonify(args)),
+    gulpif(useStandalone, standalonify(req.url)),
 
     through.obj(function(file) {
       var data = String(file.contents);
