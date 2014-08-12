@@ -112,7 +112,7 @@ Parser.prototype.isModified = function() {
   var ptime = mtime(join(this.root, 'package.json'));
   var ltime = new Date(this.headers['if-modified-since']);
 
-  return Math.max(ftime, ptime) > ltime;
+  return (this.modifiedTime =  Math.max(ftime, ptime)) > ltime;
 
   function mtime(filepath) {
     return new Date(fs.statSync(filepath).mtime);
