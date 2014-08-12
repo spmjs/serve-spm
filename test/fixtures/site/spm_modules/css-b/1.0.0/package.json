@@ -1,7 +1,0 @@
-{
-  "name": "css-b",
-  "version": "1.0.0",
-  "spm": {
-    "main": "index.css"
-  }
-}

@@ -2,6 +2,7 @@
 
 var strip = require('strip-comments');
 var through = require('through2');
+var util = require('../util');
 
 module.exports = function css2jsParser() {
   return through.obj(function(file) {
@@ -10,29 +11,18 @@ module.exports = function css2jsParser() {
   });
 };
 
-var headerTpl = 'define(function(require, exports, module){\n';
-var footerTpl = '\n});\n';
-
 function parser(file) {
   var code = file.contents.toString();
-
-  file.contents = Buffer.concat([
-    new Buffer(headerTpl),
-    new Buffer('seajs.importStyle(\''),
-    new Buffer(css2js(code)),
-    new Buffer('\');'),
-    new Buffer(footerTpl)
-  ]);
+  code = css2js(code);
+  code = util.define('seajs.importStyle(\''+code+'\');');
+  file.contents = new Buffer(code);
   return file;
 }
 
 function css2js(code) {
-
-  code = strip
+  return strip
     .block(code)
     .replace(/\n|\r/g, '')
     .replace(/\\/g, '\\\\')
     .replace(/'/g, '"');
-
-  return code;
 }

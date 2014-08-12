@@ -1,26 +1,23 @@
 'use strict';
 
 var through = require('through2');
+var util = require('../util');
 
-module.exports = function tplParser(options) {
+module.exports = function tplParser() {
   return through.obj(function(file) {
-    file = parser(file, options);
-    this.push(file);
+    this.push(parser(file));
   });
 };
 
-var headerTpl = 'define(function(require, exports, module){\n';
-var footerTpl = '\n});\n';
-
 function parser(file) {
-  var code = file.contents.toString();
+  var code = String(file.contents);
 
-  file.contents = Buffer.concat([
-    new Buffer(headerTpl),
-    new Buffer('module.exports=\''),
-    new Buffer(code.replace(/\n|\r/g, '').replace(/'/g, '"')),
-    new Buffer('\';'),
-    new Buffer(footerTpl)
-  ]);
+  code = code
+    .replace(/\n|\r/g, '')
+    .replace(/'/g, '"');
+  code = 'module.exports = ' + code + ';';
+  code = util.define(code);
+  
+  file.contents = new Buffer(code);
   return file;
 }
