@@ -1,9 +1,12 @@
 var fs = require('fs');
-var join = require('path').join;
+var path = require('path');
+var join = path.join;
 var Package = require('father').SpmPackage;
 var extend = require('extend');
 var rename = require('rename');
+var glob = require('glob');
 var spmrc = require('spmrc');
+var uniq = require('array-uniq');
 var moduleDir = spmrc.get('install.path');
 
 function Parser(opts) {
@@ -12,9 +15,12 @@ function Parser(opts) {
   this.name = this.pkg.name;
   this.version = this.pkg.version;
 
+  this.parseReq();
   this.parseDepPkg();
   this.file = this.getFile();
 }
+
+module.exports = Parser;
 
 Parser.prototype.parseReq = function() {
   var search = this.req.search;
@@ -28,7 +34,7 @@ Parser.prototype.parseDepPkg = function() {
 
   var m = this.req.pathname.match(/^\/(.+?)\/(.+?)\//);
   if (m && m[0]) {
-    var pkgId = m[0] + '@' + m[1];
+    var pkgId = m[1] + '@' + m[2];
     this.pkg = this.pkg.get(pkgId);
   }
 };
@@ -42,21 +48,23 @@ Parser.prototype.getFile = function() {
   if (/\/$/.test(file)) {
     if (map(join(file, 'index.html'))) return file;
     if (map(join(file, 'index.htm'))) return file;
+    this.isDir = true;
   }
 
   // ^/dist/name/version/a.js -> /a.js
   var prefix = '/dist/'+this.name+'/'+this.version;
   if (new RegExp('^'+prefix+'/').test(pathname)) {
-    if (map(filepath.replace(prefix, ''))) return file;
+    if (map(file.replace(prefix, ''))) return file;
   }
 
-  // ^/name/version/a.js -> /dist/name/version/a.js
   var m = pathname.match(/^\/(.+?)\/(.+?)\//);
   if (m && m[0]) {
+    // ^/name/version/a.js -> /dist/name/version/a.js
     if (map(join(root, 'dist', pathname))) {
       this.noWrap = true;
       return file;
     }
+    // ^/name/version/a.js -> /spm_modules/name/version/a.js
     if (map(join(root, moduleDir, pathname))) return file;
   }
 
@@ -112,8 +120,8 @@ Parser.prototype.isStandalone = function(filepath) {
     return false;
   }
 
-  var pkg = this.rootPkg;
-  var builgArgs = pkg.spm && pkg.spm.buildArgs || '';
+  var pkg = this.rootPkg.origin;
+  var buildArgs = (pkg.spm && pkg.spm.buildArgs) || '';
   if (buildArgs.indexOf('--include standalone') === -1) {
     return false;
   }
@@ -132,13 +140,12 @@ Parser.prototype.getEntries = function() {
   // main
   entries.push(join(pkg.dest, pkg.main));
   // outputs
-  if (pkg.output) {
-    pkg.output.forEach(function(output) {
-      var items = glob.sync(output, {cwd:pkg.dest});
-      items.forEach(function(item) {
-        entries.push(join(pkg.dest, item));
-      });
+  pkg.output.forEach(function(output) {
+    var items = glob.sync(output, {cwd:pkg.dest});
+    items.forEach(function(item) {
+      entries.push(join(pkg.dest, item));
     });
-  }
-  return entries;
+  });
+  // unique
+  return uniq(entries);
 };
