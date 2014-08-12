@@ -12,7 +12,7 @@ describe('util', function() {
 
   it('isRelative', function() {
     util.isRelative('./a').should.be.equal(true);
-  })
+  });
 
   it('define', function() {
     util.define('alert(1);').should.be.equal(
@@ -37,5 +37,14 @@ describe('util', function() {
     p3.should.not.be.equal(p1);
     p3.name.should.be.equal('a');
     p3.version.should.be.equal('0.1.0');
+  });
+
+  it('isCSSFile', function() {
+    util.isCSSFile('/path/to/a.css').should.be.true;
+    util.isCSSFile('/path/to/a.less').should.be.true;
+    util.isCSSFile('/path/to/a.styl').should.be.true;
+    util.isCSSFile('/path/to/a.scss').should.be.true;
+    util.isCSSFile('/path/to/a.sass').should.be.true;
+    util.isCSSFile('/path/to/a.js').should.be.false;
   });
 });

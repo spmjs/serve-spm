@@ -1,7 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 var join = path.join;
-var Package = require('father').SpmPackage;
 var extend = require('extend');
 var rename = require('rename');
 var glob = require('glob');
@@ -33,7 +32,7 @@ Parser.prototype.parseDepPkg = function() {
   this.rootPkg = this.pkg;
 
   var m = this.req.pathname.match(/^\/(.+?)\/(.+?)\//);
-  if (m && m[0]) {
+  if (m && m[0] && /^\d+\.\d+\.\d+/.test(m[2])) {
     var pkgId = m[1] + '@' + m[2];
     this.pkg = this.pkg.get(pkgId);
   }
@@ -71,8 +70,9 @@ Parser.prototype.getFile = function() {
   // ^handlebars-runtime.js, ^/dist/cjs/handlebars.runtime.js
   if (pathname === '/dist/cjs/handlebars.runtime.js' ||
     pathname === '/handlebars-runtime.js') {
+    this.noWrap = true;
     this.handlebarId = pathname.slice(1, -3);
-    return join(root, 'handlebars.runtime.js');
+    return join(__dirname, 'handlebars.runtime.js');
   }
 
   // file itself
@@ -104,6 +104,10 @@ Parser.prototype.getFile = function() {
 };
 
 Parser.prototype.isModified = function() {
+  if (!this.headers || !this.headers['if-modified-since']) {
+    return true;
+  }
+
   var ftime = mtime(this.file);
   var ptime = mtime(join(this.root, 'package.json'));
   var ltime = new Date(this.headers['if-modified-since']);

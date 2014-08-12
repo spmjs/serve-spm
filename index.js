@@ -6,6 +6,7 @@ var pipe = require('multipipe');
 var gulp = require('gulp');
 var less = require('gulp-less');
 var gulpif = require('gulp-if');
+var mime = require('mime');
 
 var cssParser = require('./parser/css');
 var css2jsParser = require('./parser/css2js');
@@ -26,7 +27,10 @@ module.exports = function(root, opts) {
 };
 
 function parse(root, opts, req, res, next) {
-  next = next || function() {};
+  next = next || function() {
+    res.writeHead(404);
+    res.end('');
+  };
 
   var parser = new Parser({
     root: root,
@@ -36,7 +40,7 @@ function parse(root, opts, req, res, next) {
   });
 
   // is dep package, but not found
-  if (parser.pkg.father && !parser.pkg) {
+  if (!parser.pkg) {
     return next();
   }
 
@@ -48,19 +52,19 @@ function parse(root, opts, req, res, next) {
   // 304
   if (!parser.isModified()) {
     res.writeHead(304);
-    return res.send('');
+    return res.end('');
   }
 
   if (opts.log) {
     console.log('>> ServeSPM %s < ./%s',
-      req.pathname, path.relative(process.cwd(), file));
+      parser.req.pathname, path.relative(process.cwd(), parser.file));
   }
 
   // nowrap
   if (parser.noWrap) {
     var data = fs.readFileSync(parser.file, 'utf-8');
     if (parser.handlebarId) {
-      data = util.template(data, {id:id});
+      data = util.template(data, {id:parser.handlebarId});
     }
     return end(data, res, path.extname(parser.file));
   }
@@ -68,10 +72,10 @@ function parse(root, opts, req, res, next) {
   // transport file
 
   var file = parser.file;
-  var args = {pkg:pkg};
+  var args = {pkg:parser.pkg};
 
   var useCss2jsParser = util.isCSSFile(file) &&
-    /\.js$/.test(req.pathname);
+    /\.js$/.test(parser.req.pathname);
   var useStandalone = function(file) {
     return parser.isStandalone(file.path);
   };
@@ -94,4 +98,13 @@ function parse(root, opts, req, res, next) {
       end(data, res, ext);
     })
   );
+}
+
+function end(data, res, extname) {
+  if (['.tpl', '.json', '.handlebars'].indexOf(extname) > -1) {
+    extname = '.js';
+  }
+  res.setHeader('Content-Type', mime.lookup(extname));
+  res.writeHead(200);
+  res.end(data);
 }

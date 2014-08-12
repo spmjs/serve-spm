@@ -33,7 +33,9 @@ describe('parser', function() {
   });
 
   it('request dep package', function() {
-    var p = new Parser(extend(args, {
+    var p;
+
+    p = new Parser(extend(args, {
       req: {pathname: '/b/0.1.0/index.js'}
     }));
     p.name.should.be.equal('a');
@@ -41,6 +43,11 @@ describe('parser', function() {
     p.pkg.name.should.be.equal('b');
     p.pkg.version.should.be.equal('0.1.0');
     p.file.should.be.endWith('/b/0.1.0/index.js');
+
+    p = new Parser(extend(args, {
+      req: {pathname: '/b/invalid.version/index.js'}
+    }));
+    (p.pkg.father === undefined).should.be.true;
   });
 
   it('getFile', function() {
@@ -92,12 +99,14 @@ describe('parser', function() {
     }));
     p.file.should.be.endWith('/handlebars.runtime.js');
     p.handlebarId = 'handlebars-runtime';
+    p.noWrap.should.be.true;
 
     p = new Parser(extend(args, {
       req: {pathname: '/dist/cjs/handlebars.runtime.js'}
     }));
     p.file.should.be.endWith('/handlebars.runtime.js');
     p.handlebarId = 'dist/cjs/handlebars.runtime';
+    p.noWrap.should.be.true;
 
     p = new Parser(extend(args, {
       req: {pathname: '/a.css.js'}

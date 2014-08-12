@@ -43,6 +43,6 @@ util.getPkg = function(root) {
 };
 
 util.isCSSFile = function(file) {
-  return ['.less', '.styl', '.sass', '.scss']
+  return ['.css', '.less', '.styl', '.sass', '.scss']
     .indexOf(path.extname(file)) > -1;
 }
