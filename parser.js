@@ -65,6 +65,8 @@ Parser.prototype.getFile = function() {
     }
     // ^/name/version/a.js -> /spm_modules/name/version/a.js
     if (map(join(root, moduleDir, pathname))) return file;
+    // Deprecate: ^/name/version/a.js -> /sea_modules/name/version/a.js
+    if (map(join(root, 'sea-modules', pathname))) return file;
   }
 
   // ^handlebars-runtime.js, ^/dist/cjs/handlebars.runtime.js -> hanelebars.runtime.js
