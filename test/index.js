@@ -21,6 +21,13 @@ describe('index', function() {
 
   it('normal', function(done) {
     local('index.js', function(err, res, body) {
+      body.should.be.equal(util.define('var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n'));
+      done();
+    });
+  });
+
+  it('transportId only in root entries and with id_leading prefix request', function(done) {
+    local('a/0.1.0/index.js', function(err, res, body) {
       var id = 'a/0.1.0/index.js';
       body.should.be.equal(util.define('var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n', id));
       done();
