@@ -50,8 +50,16 @@ Parser.prototype.getFile = function() {
     this.isDir = true;
   }
 
+  var prefix;
+
   // ^/dist/name/version/a.js -> /a.js
-  var prefix = '/dist/'+this.name+'/'+this.version;
+  prefix = '/dist/'+this.name+'/'+this.version;
+  if (new RegExp('^'+prefix+'/').test(pathname)) {
+    if (map(file.replace(prefix, ''))) return file;
+  }
+
+  // ^/name/version/a.js -> /a.js
+  prefix = '/' + this.name+'/'+this.version;
   if (new RegExp('^'+prefix+'/').test(pathname)) {
     if (map(file.replace(prefix, ''))) return file;
   }
@@ -134,12 +142,7 @@ Parser.prototype.isStandalone = function(filepath) {
     return false;
   }
 
-  var entries = this.getEntries();
-  if (entries.indexOf(filepath) === -1) {
-    return false;
-  }
-
-  return true;
+  return this.getEntries().indexOf(filepath) > -1;
 };
 
 Parser.prototype.getEntries = function() {
