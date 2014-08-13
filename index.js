@@ -51,6 +51,11 @@ function parse(root, opts, req, res, next) {
     return next();
   }
 
+  // don't handle dir
+  if (parser.isDir) {
+    return next();
+  }
+
   // 304
   var isModified = parser.isModified();
   res.setHeader('Last-Modified', parser.modifiedTime);

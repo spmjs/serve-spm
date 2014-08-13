@@ -83,10 +83,17 @@ describe('index', function() {
   });
 
   it('isModified', function(done) {
-    local('index.js', function(err, res, body) {
+    local('index.js', function(err, res) {
       res.statusCode.should.be.equal(304);
       done();
     }, {headers:{'if-modified-since':'2046 8-14 13:52:38'}});
+  });
+
+  it('isDir', function(done) {
+    local('', function(err, res) {
+      res.statusCode.should.be.equal(404);
+      done();
+    });
   });
 });
 
