@@ -16,10 +16,16 @@ describe('util', function() {
 
   it('define', function() {
     util.define('alert(1);').should.be.equal(
-      'define(function(require, exports, module){\n' +
-      'alert(1);' +
-      '\n});\n'
-      );
+        'define(function(require, exports, module){\n' +
+        'alert(1);' +
+        '\n});\n'
+    );
+
+    util.define('alert(1);', 'id').should.be.equal(
+        'define(\'id\', function(require, exports, module){\n' +
+        'alert(1);' +
+        '\n});\n'
+    );
   });
 
   it('getPkg', function() {

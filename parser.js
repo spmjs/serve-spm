@@ -17,6 +17,11 @@ function Parser(opts) {
   this.parseReq();
   this.parseDepPkg();
   this.file = this.getFile();
+
+  if (this.file && this.pkg) {
+    this.entries = this.getEntries();
+    this.isEntry = !this.pkg.father && this.entries.indexOf(this.file) > -1;
+  }
 }
 
 module.exports = Parser;
@@ -142,7 +147,7 @@ Parser.prototype.isStandalone = function(filepath) {
     return false;
   }
 
-  return this.getEntries().indexOf(filepath) > -1;
+  return this.entries.indexOf(filepath) > -1;
 };
 
 Parser.prototype.getEntries = function() {

@@ -15,9 +15,18 @@ module.exports = function jsParser(options) {
 
 function parser(file, options) {
   file.contents = new Buffer(transportFile(file, options));
-  // if (!options.nowrap) {
-  file.contents = new Buffer(util.define(file.contents));
-  // }
+
+  var id;
+  var pkg = options.pkg;
+  if (options.isEntry) {
+    id = util.template('{{name}}/{{version}}/{{filepath}}', {
+      name: pkg.name,
+      version: pkg.version,
+      filepath: path.relative(options.root, file.path)
+    });
+  }
+
+  file.contents = new Buffer(util.define(file.contents, id));
   return file;
 }
 

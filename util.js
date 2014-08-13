@@ -18,8 +18,12 @@ util.isRelative = function(filepath) {
   return filepath.charAt(0) === '.';
 };
 
-util.define = function(str) {
-  return 'define(function(require, exports, module){\n' +
+util.define = function(str, id) {
+  var idStr = '';
+  if (id) {
+    idStr = '\''+id+'\', ';
+  }
+  return 'define(' + idStr + 'function(require, exports, module){\n' +
     String(str) + '\n});\n';
 };
 

@@ -81,8 +81,6 @@ function parse(root, opts, req, res, next) {
   // transport file
 
   var file = parser.file;
-  var args = {pkg:parser.pkg};
-
   var useCss2jsParser = util.isCSSFile(file) &&
     /\.js$/.test(parser.req.pathname);
   var useStandalone = function(file) {
@@ -93,13 +91,13 @@ function parse(root, opts, req, res, next) {
     gulp.src(file),
 
     gulpif(/\.less$/, less({ paths: [path.dirname(file)] })),
-    gulpif(/\.css$/, cssParser(args)),
-    gulpif(useCss2jsParser, css2jsParser(args)),
+    gulpif(/\.css$/, cssParser(parser)),
+    gulpif(useCss2jsParser, css2jsParser(parser)),
     gulpif(/\.coffee$/, coffee({bare: true})),
-    gulpif(/\.js$/, jsParser(args)),
-    gulpif(/\.tpl$/, tplParser(args)),
-    gulpif(/\.json$/, jsonParser(args)),
-    gulpif(/\.handlebars$/, handlebarsParser(args)),
+    gulpif(/\.js$/, jsParser(parser)),
+    gulpif(/\.tpl$/, tplParser(parser)),
+    gulpif(/\.json$/, jsonParser(parser)),
+    gulpif(/\.handlebars$/, handlebarsParser(parser)),
     gulpif(useStandalone, standalonify(req.url)),
 
     through.obj(function(file) {

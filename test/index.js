@@ -21,7 +21,8 @@ describe('index', function() {
 
   it('normal', function(done) {
     local('index.js', function(err, res, body) {
-      body.should.be.equal(util.define('var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n'));
+      var id = 'a/0.1.0/index.js';
+      body.should.be.equal(util.define('var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n', id));
       done();
     });
   });
