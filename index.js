@@ -52,11 +52,11 @@ function parse(root, opts, req, res, next) {
   }
 
   // 304
-  if (!parser.isModified()) {
+  var isModified = parser.isModified();
+  res.setHeader('Last-Modified', parser.modifiedTime);
+  if (!isModified) {
     res.writeHead(304);
     return res.end('');
-  } else {
-    res.setHeader('Last-Modified', parser.modifiedTime);
   }
 
   if (opts.log) {

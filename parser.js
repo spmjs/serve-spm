@@ -106,15 +106,17 @@ Parser.prototype.getFile = function() {
 };
 
 Parser.prototype.isModified = function() {
+  var ftime = mtime(this.file);
+  var ptime = mtime(join(this.root, 'package.json'));
+  var ltime = +new Date(+this.headers['if-modified-since']);
+
+  this.modifiedTime =  Math.max(ftime, ptime);
+
   if (!this.headers || !this.headers['if-modified-since']) {
     return true;
   }
 
-  var ftime = mtime(this.file);
-  var ptime = mtime(join(this.root, 'package.json'));
-  var ltime = new Date(this.headers['if-modified-since']);
-
-  return (this.modifiedTime =  Math.max(ftime, ptime)) > ltime;
+  return this.modifiedTime > ltime;
 
   function mtime(filepath) {
     return new Date(fs.statSync(filepath).mtime);
