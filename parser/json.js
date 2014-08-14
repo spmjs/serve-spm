@@ -1,23 +1,19 @@
 'use strict';
 
 var through = require('through2');
+var util = require('../util');
 
-module.exports = function jsonParser(options) {
+module.exports = function jsonParser() {
   return through.obj(function(file) {
-    file = parser(file, options);
-    this.push(file);
+    this.push(parser(file));
   });
 };
 
-var headerTpl = 'define(function(require, exports, module){\n';
-var footerTpl = '\n});\n';
-
 function parser(file) {
-  file.contents = Buffer.concat([
-    new Buffer(headerTpl),
-    new Buffer('module.exports ='),
-    file.contents,
-    new Buffer(footerTpl)
-  ]);
+  var code = String(file.contents);
+  code = 'module.exports = ' + code + ';';
+  code = util.define(code);
+
+  file.contents = new Buffer(code);
   return file;
 }

@@ -6,9 +6,6 @@ var through = require('through2');
 var rename = require('rename');
 var spmrc = require('spmrc');
 
-var headerTpl = 'define(function(require, exports, module){\n';
-var footerTpl = '\n});\n';
-
 module.exports = function jsParser(options) {
   return through.obj(function(file) {
     file = parser(file, options);
@@ -18,9 +15,21 @@ module.exports = function jsParser(options) {
 
 function parser(file, options) {
   file.contents = new Buffer(transportFile(file, options));
-  if (!options.nowrap) {
-    file.contents = wrap(file, options);
+
+  var pkg = options.pkg;
+  var id;
+  if (options.isEntry) {
+    id = util.template('{{name}}/{{version}}/{{filepath}}', {
+      name: pkg.name,
+      version: pkg.version,
+      filepath: path.relative(options.root, file.path)
+    });
   }
+  if (!options.req || id !== options.req.pathname.slice(1)) {
+    id = '';
+  }
+
+  file.contents = new Buffer(util.define(file.contents, id));
   return file;
 }
 
@@ -29,29 +38,16 @@ function transportFile(file, options) {
     var dep = item.path.toLowerCase();
 
     if (util.isRelative(dep)) {
-      var extname = path.extname(dep);
-
-      // .less -> .css
-      if (extname === '.less') {
+      if (util.isCSSFile(dep)) {
         return format('require("%s")', rename(dep, {extname:'.css'}));
       }
-
       return item.string;
-    }
 
-    else {
+    } else {
       var p = options.pkg.dependencies[dep];
       if (!p) return item.string;
-      return format('require("%s/%s/%s/%s")',
-        spmrc.get('install.path'), p.name, p.version, p.main);
+      return format('require("%s/%s/%s")',
+        p.name, p.version, p.main);
     }
   });
-}
-
-function wrap(file) {
-  return Buffer.concat([
-    new Buffer(headerTpl),
-    file.contents,
-    new Buffer(footerTpl)
-  ]);
 }

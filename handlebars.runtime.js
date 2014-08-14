@@ -1,4 +1,4 @@
-define("{{name}}", ["handlebars-runtime/1.3.0/dist/cjs/handlebars/base-debug", "handlebars-runtime/1.3.0/dist/cjs/handlebars/safe-string-debug", "handlebars-runtime/1.3.0/dist/cjs/handlebars/exception-debug", "handlebars-runtime/1.3.0/dist/cjs/handlebars/utils-debug", "handlebars-runtime/1.3.0/dist/cjs/handlebars/runtime-debug"], function(require, exports, module) {
+define("{{id}}", ["handlebars-runtime/1.3.0/dist/cjs/handlebars/base-debug", "handlebars-runtime/1.3.0/dist/cjs/handlebars/safe-string-debug", "handlebars-runtime/1.3.0/dist/cjs/handlebars/exception-debug", "handlebars-runtime/1.3.0/dist/cjs/handlebars/utils-debug", "handlebars-runtime/1.3.0/dist/cjs/handlebars/runtime-debug"], function(require, exports, module) {
   "use strict";
   /*globals Handlebars: true */
   var base = require("handlebars-runtime/1.3.0/dist/cjs/handlebars/base-debug");

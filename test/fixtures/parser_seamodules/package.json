@@ -1,0 +1,12 @@
+{
+  "name": "a",
+  "version": "0.1.0",
+  "spm": {
+    "dependencies": {
+      "b": "0.1.0"
+    },
+    "output": [
+      "index.js"
+    ]
+  }
+}

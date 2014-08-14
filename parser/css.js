@@ -2,7 +2,6 @@ var util = require('../util');
 var imports = require('css-imports');
 var format = require('util').format;
 var through = require('through2');
-var spmrc = require('spmrc');
 
 module.exports = function cssParser(options) {
   return through.obj(function(file) {
@@ -18,16 +17,14 @@ function parser(file, options) {
 
 function transportFile(file, pkg) {
   return imports(file.contents, function(item) {
+    var deps = pkg.dependencies;
     var dep = item.path;
 
-    if (util.isRelative(dep)) {
+    if (!util.isRelative(dep) && deps && deps[dep]) {
+      var p = deps[dep];
+      return format('@import "%s/%s/%s";', p.name, p.version, p.main);
+    } else {
       return item.string;
-    }
-
-    else {
-      var p = pkg.dependencies[dep];
-      return format('@import "/%s/%s/%s/%s";',
-        spmrc.get('install.path'), p.name, p.version, p.main);
     }
   });
 }

@@ -1,7 +1,0 @@
-{
-  "name": "js-b",
-  "version": "1.0.0",
-  "spm": {
-    "main": "index.js"
-  }
-}
