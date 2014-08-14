@@ -36,10 +36,12 @@ util.getPkg = function(root) {
   var mtime = +new Date(fs.statSync(file).mtime);
   var data = pkgCache[root];
   if (!data || data.mtime !== mtime) {
+    var isSeaModules = !fs.existsSync(join(root, moduleDir)) &&
+      fs.existsSync(join(root, 'sea-modules'));
     data = pkgCache[root] = {
       mtime: mtime,
       pkg: new Package(root, {
-        moduleDir: moduleDir
+        moduleDir: isSeaModules ? 'sea-modules' : moduleDir
       })
     };
   }

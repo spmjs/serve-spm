@@ -214,3 +214,21 @@ describe('parser', function() {
     p.isStandalone(join(root, 'notfound.js')).should.be.false;
   });
 });
+
+describe('parser for sea-modules', function() {
+
+  var root = join(__dirname, 'fixtures/parser_seamodules');
+  var args = {
+    pkg: util.getPkg(root),
+    root: root
+  };
+
+  it('normal', function() {
+    var p = new Parser(extend(args, {
+      req: {pathname: '/index.js'}
+    }));
+    p.name.should.be.equal('a');
+    p.version.should.be.equal('0.1.0');
+    p.file.should.be.endWith('/index.js');
+  });
+});
