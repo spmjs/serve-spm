@@ -80,6 +80,15 @@ describe('parser', function() {
     (p.file === undefined).should.be.true;
 
     p = new Parser(extend(args, {
+      req: {pathname: '/a/b/c/index.js'},
+      paths: [
+        ['/a/b/c', '']
+      ]
+    }));
+    p.file.should.be.endWith('/index.js');
+    p.file.should.not.be.endWith('/a/b/c/index.js');
+
+    p = new Parser(extend(args, {
       req: {pathname: '/a/0.1.0/index.js'}
     }));
     p.file.should.be.endWith('/index.js');

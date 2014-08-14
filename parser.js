@@ -46,6 +46,13 @@ Parser.prototype.parseDepPkg = function() {
 Parser.prototype.getFile = function() {
   var pathname = this.req.pathname;
   var root = this.root;
+
+  if (this.paths && Array.isArray(this.paths)) {
+    this.paths.forEach(function(item) {
+      pathname = pathname.replace(item[0], item[1]);
+    });
+  }
+
   var file = join(root, pathname);
 
   // /$ -> index.htm, index.html
