@@ -33,6 +33,11 @@ module.exports.util = util;
 function parse(root, opts, req, res, next) {
   next = req.headers['servespmexit'] ? notFound : (next || notFound);
 
+  var pkg = util.getPkg(root);
+  if (!pkg) {
+    return next();
+  }
+
   var parser = new Parser(extend({
     root: root,
     req: urlparse(req.url.toLowerCase()),

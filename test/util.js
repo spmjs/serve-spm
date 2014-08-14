@@ -43,6 +43,9 @@ describe('util', function() {
     p3.should.not.be.equal(p1);
     p3.name.should.be.equal('a');
     p3.version.should.be.equal('0.1.0');
+
+    var p4 = util.getPkg(join(root, 'notfound'));
+    (p4 === null).should.be.true;
   });
 
   it('isCSSFile', function() {

@@ -162,6 +162,25 @@ describe('servespmexit', function() {
   });
 });
 
+describe('root not exist', function() {
+  before(function(done) {
+    server = http.createServer(serveSPM(join(root, 'notfound'), {
+      log: true
+    }));
+    server.listen(port, done);
+  });
+  after(function() {
+    server && server.close();
+  });
+
+  it('normal', function(done) {
+    local('index.js', function(err, res) {
+      res.statusCode.should.be.equal(404);
+      done();
+    });
+  });
+});
+
 function local(pathname, cb, opts) {
   var args = {
     url: 'http://localhost:'+port+'/'+pathname

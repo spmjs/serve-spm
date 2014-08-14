@@ -33,6 +33,9 @@ util.define = function(str, id) {
 var pkgCache = {};
 util.getPkg = function(root) {
   var file = join(root, 'package.json');
+  if (!fs.existsSync(file)) {
+    return null;
+  }
   var mtime = +new Date(fs.statSync(file).mtime);
   var data = pkgCache[root];
   if (!data || data.mtime !== mtime) {
