@@ -31,10 +31,7 @@ module.exports = function(root, opts) {
 module.exports.util = util;
 
 function parse(root, opts, req, res, next) {
-  next = next || function() {
-    res.writeHead(404);
-    res.end('');
-  };
+  next = req.headers['spmserver'] ? notFound : (next || notFound);
 
   var parser = new Parser(extend({
     root: root,
@@ -108,6 +105,11 @@ function parse(root, opts, req, res, next) {
       end(data, res, ext);
     })
   );
+
+  function notFound() {
+    res.writeHead(404);
+    res.end('');
+  }
 }
 
 function end(data, res, extname) {

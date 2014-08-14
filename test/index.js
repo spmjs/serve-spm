@@ -5,6 +5,7 @@ var request = require('request');
 var util = require('../util');
 var spy = require('spy');
 var extend = require('extend');
+var express = require('express');
 
 var port = 12345;
 var server;
@@ -124,6 +125,40 @@ describe('log option', function() {
       console.log = log;
       done();
     });
+  });
+});
+
+describe('spmserver', function() {
+  var app = express();
+
+  app.use(serveSPM(root, {
+    log: true
+  }));
+  app.use(function(req, res, next) {
+    res.end('ok');
+  });
+
+  before(function(done) {
+    server = http.createServer(app);
+    server.listen(port, done);
+  });
+  after(function() {
+    server && server.close();
+  });
+
+  it('without spmserver header', function(done) {
+    local('a/0.1.0/notfound.js', function(err, res, body) {
+      res.statusCode.should.be.equal(200);
+      body.should.be.equal('ok');
+      done();
+    });
+  });
+
+  it('with spmserver header', function(done) {
+    local('a/0.1.0/notfound.js', function(err, res) {
+      res.statusCode.should.be.equal(404);
+      done();
+    }, {headers:{'spmserver':'1'}});
   });
 });
 
