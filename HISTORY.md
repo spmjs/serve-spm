@@ -2,6 +2,19 @@
 
 ---
 
+## 0.5.1
+
+- return next if package can't be parsed correctly
+
+## 0.5.0
+
+- speedup (eg. a project required acharts, from 6000ms+ to 774ms, and 180ms with deps built)
+- add testcase, 100% test coverage
+- add more map rules
+- compatible with old sea-modules package
+- add paths support
+- add coffee support
+
 ## 0.4.0
 
 - sea-modules to spm_modules
