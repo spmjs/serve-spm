@@ -31,7 +31,7 @@ module.exports = function(root, opts) {
 module.exports.util = util;
 
 function parse(root, opts, req, res, next) {
-  next = req.headers['spmserver'] ? notFound : (next || notFound);
+  next = req.headers['servespmexit'] ? notFound : (next || notFound);
 
   var parser = new Parser(extend({
     root: root,

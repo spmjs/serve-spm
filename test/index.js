@@ -128,7 +128,7 @@ describe('log option', function() {
   });
 });
 
-describe('spmserver', function() {
+describe('servespmexit', function() {
   var app = express();
 
   app.use(serveSPM(root, {
@@ -146,7 +146,7 @@ describe('spmserver', function() {
     server && server.close();
   });
 
-  it('without spmserver header', function(done) {
+  it('without servespmexit header', function(done) {
     local('a/0.1.0/notfound.js', function(err, res, body) {
       res.statusCode.should.be.equal(200);
       body.should.be.equal('ok');
@@ -154,11 +154,11 @@ describe('spmserver', function() {
     });
   });
 
-  it('with spmserver header', function(done) {
+  it('with servespmexit header', function(done) {
     local('a/0.1.0/notfound.js', function(err, res) {
       res.statusCode.should.be.equal(404);
       done();
-    }, {headers:{'spmserver':'1'}});
+    }, {headers:{'servespmexit':'1'}});
   });
 });
 
