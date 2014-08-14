@@ -28,6 +28,8 @@ module.exports = function(root, opts) {
   };
 };
 
+module.exports.util = util;
+
 function parse(root, opts, req, res, next) {
   next = next || function() {
     res.writeHead(404);
