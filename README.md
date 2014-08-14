@@ -25,6 +25,10 @@ app.use(serveSPM(pkgRoot, {
 
 Enable log for requests, default `false`.
 
+### paths
+
+Map pathname for debug. e.g. `paths: [['/a/b/c/', '']]`
+
 ## LICENSE
 
 Copyright (c) 2014 sorrycc. Licensed under the MIT license.
