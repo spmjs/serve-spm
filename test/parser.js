@@ -48,6 +48,12 @@ describe('parser', function() {
       req: {pathname: '/b/invalid.version/index.js'}
     }));
     (p.pkg.father === undefined).should.be.true;
+
+    // invalid version
+    p = new Parser(extend(args, {
+      req: {pathname: '/spm2/a/0.1.0/a.js'}
+    }));
+    (p.file === undefined).should.be.true;
   });
 
   it('getFile', function() {

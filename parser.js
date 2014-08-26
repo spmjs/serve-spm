@@ -6,6 +6,7 @@ var rename = require('rename');
 var glob = require('glob');
 var spmrc = require('spmrc');
 var uniq = require('array-uniq');
+var semver = require('semver');
 var moduleDir = spmrc.get('install.path');
 
 function Parser(opts) {
@@ -77,7 +78,7 @@ Parser.prototype.getFile = function() {
   }
 
   var m = pathname.match(/^\/(.+?)\/(.+?)\//);
-  if (m && m[0]) {
+  if (m && m[0] && semver.valid(m[2])) {
     // ^/name/version/a.js -> /dist/name/version/a.js
     if (map(join(root, 'dist', pathname))) {
       this.noWrap = true;
