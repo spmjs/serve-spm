@@ -2,6 +2,10 @@
 
 ---
 
+## 0.5.4
+
+- don't transform file to string, for bin files like image
+
 ## 0.5.3
 
 - find precompiler language file first
