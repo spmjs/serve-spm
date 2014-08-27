@@ -98,9 +98,6 @@ Parser.prototype.getFile = function() {
     return join(__dirname, 'handlebars.runtime.js');
   }
 
-  // file itself
-  if (map(file)) return file;
-
   if (path.extname(file) === '.js') {
     // a.css.js^ -> a.css, a.tpl.js -> a.tpl, ...
     if (map(file.slice(0, -3))) return file;
@@ -117,6 +114,9 @@ Parser.prototype.getFile = function() {
     if (map(rename(file, {extname: '.sass'}))) return file;
     if (map(rename(file, {extname: '.styl'}))) return file;
   }
+
+  // file itself
+  if (map(file)) return file;
 
   function map(_file) {
     if (fs.existsSync(_file)) {

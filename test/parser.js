@@ -173,6 +173,16 @@ describe('parser', function() {
       req: {pathname: '/g.css'}
     }));
     (p.file === undefined).should.be.true;
+
+    p = new Parser(extend(args, {
+      req: {pathname: '/precompiler/a.js'}
+    }));
+    p.file.should.be.endWith('/precompiler/a.coffee');
+
+    p = new Parser(extend(args, {
+      req: {pathname: '/precompiler/b.css'}
+    }));
+    p.file.should.be.endWith('/precompiler/b.less');
   });
 
   it('isModified', function() {
