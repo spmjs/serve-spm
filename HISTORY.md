@@ -2,6 +2,14 @@
 
 ---
 
+## 0.5.3
+
+- find precompiler language file first
+
+## 0.5.2
+
+- add semver version validation
+
 ## 0.5.1
 
 - return next if package can't be parsed correctly
