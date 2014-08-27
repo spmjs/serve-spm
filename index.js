@@ -105,9 +105,8 @@ function parse(root, opts, req, res, next) {
     gulpif(useStandalone, standalonify(req.url)),
 
     through.obj(function(file) {
-      var data = String(file.contents);
       var ext = path.extname(file.path);
-      end(data, res, ext);
+      end(file.contents, res, ext);
     })
   );
 
