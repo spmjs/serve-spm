@@ -221,7 +221,14 @@ describe('parser', function() {
     p.isStandalone('/path/to/index.js').should.be.false;
 
     args.pkg.origin.spm.buildArgs = '--include standalone';
+    p = new Parser(extend(args, {
+      req: {pathname: '/index.js'}
+    }));
+    p.isStandalone(join(root, 'index.css')).should.be.false;
+    p.isStandalone(join(root, 'index.js')).should.be.true;
+    p.isStandalone(join(root, 'notfound.js')).should.be.false;
 
+    args.pkg.origin.spm.buildArgs = '--include umd';
     p = new Parser(extend(args, {
       req: {pathname: '/index.js'}
     }));

@@ -151,7 +151,8 @@ Parser.prototype.isStandalone = function(filepath) {
 
   var pkg = this.rootPkg.origin;
   var buildArgs = (pkg.spm && pkg.spm.buildArgs) || '';
-  if (buildArgs.indexOf('--include standalone') === -1) {
+  if (buildArgs.indexOf('--include standalone') === -1
+    && buildArgs.indexOf('--include umd') === -1) {
     return false;
   }
 
