@@ -2,6 +2,10 @@
 
 ---
 
+## 0.5.5
+
+- support umd include mode
+
 ## 0.5.4
 
 - don't transform file to string, for bin files like image
