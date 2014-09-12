@@ -2,6 +2,10 @@
 
 ---
 
+## 0.5.6
+
+- fix single quote marks missing, #4
+
 ## 0.5.5
 
 - support umd include mode
