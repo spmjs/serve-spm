@@ -15,7 +15,7 @@ function parser(file) {
   code = code
     .replace(/\n|\r/g, '')
     .replace(/'/g, '"');
-  code = 'module.exports = ' + code + ';';
+  code = 'module.exports = \'' + code + '\';';
   code = util.define(code);
   
   file.contents = new Buffer(code);
