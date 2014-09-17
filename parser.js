@@ -88,6 +88,9 @@ Parser.prototype.getFile = function() {
     if (map(join(root, moduleDir, pathname))) return file;
     // Deprecate: ^/name/version/a.js -> /sea_modules/name/version/a.js
     if (map(join(root, 'sea-modules', pathname))) return file;
+
+    // change file for deps pkg, only support spm_modules
+    file = join(root, moduleDir, pathname);
   }
 
   // ^handlebars-runtime.js, ^/dist/cjs/handlebars.runtime.js -> hanelebars.runtime.js

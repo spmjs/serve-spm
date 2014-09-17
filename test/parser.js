@@ -54,6 +54,14 @@ describe('parser', function() {
       req: {pathname: '/spm2/a/0.1.0/a.js'}
     }));
     (p.file === undefined).should.be.true;
+
+    // tpl in dep pkg
+    p = new Parser(extend(args, {
+      req: {pathname: '/b/0.1.0/b.tpl.js'}
+    }));
+    p.pkg.name.should.be.equal('b');
+    p.pkg.version.should.be.equal('0.1.0');
+    p.file.should.be.endWith('/b/0.1.0/b.tpl');
   });
 
   it('getFile', function() {
