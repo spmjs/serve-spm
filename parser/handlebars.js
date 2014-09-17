@@ -41,7 +41,10 @@ function precompile(file) {
 function check(pkg) {
   var path = join(__dirname, '../package.json');
   var ver = require(path).dependencies.handlebars;
-  if (pkg.version !== ver) {
+    if (!pkg) {
+      return new PluginError('transport:handlebars', 'handlebars-runtime not found in dependencies');
+    }
+    if (pkg.version !== ver) {
     return new PluginError('transport:handlebars',
       'handlebars version should be ' + ver + ' but ' + pkg.version);
   }

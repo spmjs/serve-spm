@@ -56,4 +56,28 @@ describe('handlebars', function() {
     }));
 
   });
+
+  it('handlebars-runtime not found', function(done) {
+
+    var origin = '{{a}}';
+
+    var pkg = {
+      dependencies: {
+      }
+    };
+
+    var stream = handlebarsParser({
+      pkg: pkg
+    });
+    stream.on('error', function(e) {
+      e.message.should.be.equal('handlebars-runtime not found in dependencies');
+      done();
+    });
+    stream.on('data', function(newFile) {
+    });
+    stream.write(new gutil.File({
+      contents: new Buffer(origin)
+    }));
+
+  });
 });
