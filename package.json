@@ -1,6 +1,6 @@
 {
   "name": "serve-spm",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "SPM middleware for debug.",
   "main": "index.js",
   "scripts": {

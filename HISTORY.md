@@ -2,6 +2,11 @@
 
 ---
 
+## 0.5.7
+
+- fix file not found in dep pkgs
+- fix crash when no handlebars-runtime dependency
+
 ## 0.5.6
 
 - fix single quote marks missing, #4
