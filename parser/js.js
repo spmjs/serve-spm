@@ -4,7 +4,6 @@ var requires = require('searequire');
 var format = require('util').format;
 var through = require('through2');
 var rename = require('rename');
-var spmrc = require('spmrc');
 
 module.exports = function jsParser(options) {
   return through.obj(function(file) {
