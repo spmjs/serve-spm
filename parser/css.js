@@ -22,7 +22,7 @@ function transportFile(file, pkg) {
 
     if (!util.isRelative(dep) && deps && deps[dep]) {
       var p = deps[dep];
-      return format('@import "%s/%s/%s";', p.name, p.version, p.main);
+      return format('@import "/%s/%s/%s";', p.name, p.version, p.main);
     } else {
       return item.string;
     }
