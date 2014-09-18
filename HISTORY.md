@@ -2,6 +2,10 @@
 
 ---
 
+## 0.5.8
+
+- fix @import path error, #5
+
 ## 0.5.7
 
 - fix file not found in dep pkgs
