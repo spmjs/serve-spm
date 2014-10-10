@@ -2,6 +2,10 @@
 
 ---
 
+## 0.5.9
+
+- add support for pkg file require, #7
+
 ## 0.5.8
 
 - fix @import path error, #5

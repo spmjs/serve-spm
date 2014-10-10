@@ -35,17 +35,16 @@ describe('index', function() {
     });
   });
 
-  it('require pkg file', function(done) {
+  it('require pkg file in js', function(done) {
     local('pkg-file.js', function(err, res, body) {
       body.should.be.equal(util.define('require("b/0.1.0/path/to/file");\n'));
       done();
     });
   });
 
-  it('require pkg file', function(done) {
+  it('import pkg file in css', function(done) {
     local('pkg-file.css', function(err, res, body) {
       body.should.be.equal('@import "/b/0.1.0/a/b.css";\n');
-      console.log(body);
       done();
     });
   });
