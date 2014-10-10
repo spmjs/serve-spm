@@ -43,10 +43,19 @@ function transportFile(file, options) {
       return item.string;
 
     } else {
+      var arr = dep.split('/');
+      dep = arr.shift();
+
       var p = options.pkg.dependencies[dep];
       if (!p) return item.string;
+
+      var main = p.main;
+      // is require pkg file
+      if (arr.length > 0) {
+        main = arr.join('/');
+      }
       return format('require("%s/%s/%s")',
-        p.name, p.version, p.main);
+        p.name, p.version, main);
     }
   });
 }

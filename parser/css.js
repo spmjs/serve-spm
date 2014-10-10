@@ -20,9 +20,21 @@ function transportFile(file, pkg) {
     var deps = pkg.dependencies;
     var dep = item.path;
 
-    if (!util.isRelative(dep) && deps && deps[dep]) {
+    if (!util.isRelative(dep)) {
+      var arr = dep.split('/');
+      dep = arr.shift();
+
+      if (!deps || !deps[dep]) {
+        return item.string;
+      }
+
       var p = deps[dep];
-      return format('@import "/%s/%s/%s";', p.name, p.version, p.main);
+      var main = p.main;
+      // is require pkg file
+      if (arr.length > 0) {
+        main = arr.join('/');
+      }
+      return format('@import "/%s/%s/%s";', p.name, p.version, main);
     } else {
       return item.string;
     }

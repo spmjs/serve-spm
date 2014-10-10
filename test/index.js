@@ -35,6 +35,21 @@ describe('index', function() {
     });
   });
 
+  it('require pkg file', function(done) {
+    local('pkg-file.js', function(err, res, body) {
+      body.should.be.equal(util.define('require("b/0.1.0/path/to/file");\n'));
+      done();
+    });
+  });
+
+  it('require pkg file', function(done) {
+    local('pkg-file.css', function(err, res, body) {
+      body.should.be.equal('@import "/b/0.1.0/a/b.css";\n');
+      console.log(body);
+      done();
+    });
+  });
+
   it('nowrap', function(done) {
     local('index.js?nowrap', function(err, res, body) {
       body.should.be.equal('var b = require(\'b\');\nconsole.log(\'a\');\n');
