@@ -1,6 +1,6 @@
 {
   "name": "serve-spm",
-  "version": "0.5.9",
+  "version": "0.5.10",
   "description": "SPM middleware for debug.",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "array-uniq": "^0.1.1",
     "css-imports": "^0.3.0",
     "extend": "^1.3.0",
-    "father": "^0.8.7",
+    "father": "^0.9.6",
     "glob": "^4.0.5",
     "gulp": "^3.8.7",
     "gulp-coffee": "^2.1.1",

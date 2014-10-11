@@ -2,6 +2,10 @@
 
 ---
 
+## 0.5.10
+
+- update father to 0.9.x
+
 ## 0.5.9
 
 - add support for pkg file require, #7
