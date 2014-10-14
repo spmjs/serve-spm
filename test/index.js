@@ -42,9 +42,23 @@ describe('index', function() {
     });
   });
 
+  it('require pkg file in js (devDependencies)', function(done) {
+    local('pkg-file-dev.js', function(err, res, body) {
+      body.should.be.equal(util.define('require("c/0.1.0/path/to/file");\n'));
+      done();
+    });
+  });
+
   it('import pkg file in css', function(done) {
     local('pkg-file.css', function(err, res, body) {
       body.should.be.equal('@import "/b/0.1.0/a/b.css";\n');
+      done();
+    });
+  });
+
+  it('import pkg file in css (devDependencies)', function(done) {
+    local('pkg-file-dev.css', function(err, res, body) {
+      body.should.be.equal('@import "/c/0.1.0/a/b.css";\n');
       done();
     });
   });

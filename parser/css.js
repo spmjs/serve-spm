@@ -17,18 +17,16 @@ function parser(file, options) {
 
 function transportFile(file, pkg) {
   return imports(file.contents, function(item) {
-    var deps = pkg.dependencies;
     var dep = item.path;
 
     if (!util.isRelative(dep)) {
       var arr = dep.split('/');
       dep = arr.shift();
 
-      if (!deps || !deps[dep]) {
-        return item.string;
-      }
+      var p = (pkg.dependencies && pkg.dependencies[dep]) ||
+        (pkg.devDependencies && pkg.devDependencies[dep]);
+      if (!p) return item.string;
 
-      var p = deps[dep];
       var main = p.main;
       // is require pkg file
       if (arr.length > 0) {

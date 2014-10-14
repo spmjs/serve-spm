@@ -46,7 +46,8 @@ function transportFile(file, options) {
       var arr = dep.split('/');
       dep = arr.shift();
 
-      var p = options.pkg.dependencies[dep];
+      var p = (options.pkg.dependencies && options.pkg.dependencies[dep]) ||
+        (options.pkg.devDependencies && options.pkg.devDependencies[dep]);
       if (!p) return item.string;
 
       var main = p.main;

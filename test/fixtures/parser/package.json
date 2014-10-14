@@ -5,6 +5,9 @@
     "dependencies": {
       "b": "0.1.0"
     },
+    "devDependencies": {
+      "c": "0.1.0"
+    },
     "output": [
       "index.js"
     ]
