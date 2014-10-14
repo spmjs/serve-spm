@@ -2,6 +2,10 @@
 
 ---
 
+## 0.5.11
+
+- fix require pkg file in devDependencies
+
 ## 0.5.10
 
 - update father to 0.9.x
