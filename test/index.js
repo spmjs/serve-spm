@@ -1,217 +1,190 @@
 var join = require('path').join;
 var serveSPM = require('../');
+var should = require('should');
 var http = require('http');
-var request = require('request');
+var request = require('supertest');
 var util = require('../util');
 var spy = require('spy');
-var extend = require('extend');
 var express = require('express');
 
-var port = 12345;
-var server;
+var app;
 var root = join(__dirname, 'fixtures/parser');
 
 describe('index', function() {
-  before(function(done) {
-    server = http.createServer(serveSPM(root));
-    server.listen(port, done);
-  });
-  after(function() {
-    server && server.close();
+
+  before(function() {
+    app = http.createServer(serveSPM(root));
   });
 
   it('normal', function(done) {
-    local('index.js', function(err, res, body) {
-      body.should.be.equal(util.define('var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n'));
-      done();
-    });
+    request(app.listen())
+    .get('/index.js')
+    .expect(util.define('var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n'))
+    .expect(200, done);
   });
 
   it('transportId only in root entries and with id_leading prefix request', function(done) {
-    local('a/0.1.0/index.js', function(err, res, body) {
-      var id = 'a/0.1.0/index.js';
-      body.should.be.equal(util.define('var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n', id));
-      done();
-    });
+    var id = 'a/0.1.0/index.js';
+    request(app.listen())
+    .get('/' + id)
+    .expect(util.define('var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n', id))
+    .expect(200, done);
   });
 
   it('require pkg file in js', function(done) {
-    local('pkg-file.js', function(err, res, body) {
-      body.should.be.equal(util.define('require("b/0.1.0/path/to/file");\n'));
-      done();
-    });
+    request(app.listen())
+    .get('/pkg-file.js')
+    .expect(util.define('require("b/0.1.0/path/to/file");\n'))
+    .expect(200, done);
   });
 
   it('require pkg file in js (devDependencies)', function(done) {
-    local('pkg-file-dev.js', function(err, res, body) {
-      body.should.be.equal(util.define('require("c/0.1.0/path/to/file");\n'));
-      done();
-    });
+    request(app.listen())
+    .get('/pkg-file-dev.js')
+    .expect(util.define('require("c/0.1.0/path/to/file");\n'))
+    .expect(200, done);
   });
 
   it('import pkg file in css', function(done) {
-    local('pkg-file.css', function(err, res, body) {
-      body.should.be.equal('@import "/b/0.1.0/a/b.css";\n');
-      done();
-    });
+    request(app.listen())
+    .get('/pkg-file.css')
+    .expect('@import "/b/0.1.0/a/b.css";\n')
+    .expect(200, done);
   });
 
   it('import pkg file in css (devDependencies)', function(done) {
-    local('pkg-file-dev.css', function(err, res, body) {
-      body.should.be.equal('@import "/c/0.1.0/a/b.css";\n');
-      done();
-    });
+    request(app.listen())
+    .get('/pkg-file-dev.css')
+    .expect('@import "/c/0.1.0/a/b.css";\n')
+    .expect(200, done);
   });
 
   it('nowrap', function(done) {
-    local('index.js?nowrap', function(err, res, body) {
-      body.should.be.equal('var b = require(\'b\');\nconsole.log(\'a\');\n');
-      done();
-    });
+    request(app.listen())
+    .get('/index.js?nowrap')
+    .expect('var b = require(\'b\');\nconsole.log(\'a\');\n')
+    .expect(200, done);
   });
 
   it('dep pkg', function(done) {
-    local('b/0.1.0/index.js', function(err, res, body) {
-      body.should.be.equal(util.define('console.log(\'b\');\n'));
-      done();
-    });
+    request(app.listen())
+    .get('/b/0.1.0/index.js')
+    .expect(util.define('console.log(\'b\');\n'))
+    .expect(200, done);
   });
 
   it('dep pkg but not found', function(done) {
-    local('notfound/0.1.0/index.js', function(err, res, body) {
-      res.statusCode.should.be.equal(404);
-      done();
-    });
+    request(app.listen())
+    .get('/notfound/0.1.0/index.js')
+    .expect(404, done);
   });
 
   it('file not found', function(done) {
-    local('notfound.js', function(err, res, body) {
-      res.statusCode.should.be.equal(404);
-      done();
-    });
+    request(app.listen())
+    .get('/notfound.js')
+    .expect(404, done);
   });
 
   it('handlebars', function(done) {
-    local('dist/cjs/handlebars.runtime.js', function(err, res, body) {
-      body.should.startWith('define("dist/cjs/handlebars.runtime"');
-      done();
-    });
+    request(app.listen())
+    .get('/dist/cjs/handlebars.runtime.js')
+    .expect(/^define\("dist\/cjs\/handlebars.runtime"/)
+    .expect(200, done);
   });
 
   it('handlebars2', function(done) {
-    local('handlebars-runtime.js', function(err, res, body) {
-      body.should.startWith('define("handlebars-runtime"');
-      done();
-    });
+    request(app.listen())
+    .get('/handlebars-runtime.js')
+    .expect(/^define\("handlebars-runtime"/)
+    .expect(200, done);
   });
 
   it('tpl', function(done) {
-    local('g.json', function(err, res, body) {
-      body.should.be.equal(util.define('module.exports = {"a":1};'));
-      done();
-    });
+    request(app.listen())
+    .get('/g.json')
+    .expect(util.define('module.exports = {"a":1};'))
+    .expect(200, done);
   });
 
   it('css.js', function(done) {
-    local('a.css.js', function(err, res, body) {
-      body.should.be.equal(util.define('seajs.importStyle(\'h1{color:red;}\');'));
-      done();
-    });
+    request(app.listen())
+    .get('/a.css.js')
+    .expect(util.define('seajs.importStyle(\'h1{color:red;}\');'))
+    .expect(200, done);
   });
 
   it('isModified', function(done) {
-    local('index.js', function(err, res) {
-      res.statusCode.should.be.equal(304);
-      done();
-    }, {headers:{'if-modified-since':'2046 8-14 13:52:38'}});
+    request(app.listen())
+    .get('/index.js')
+    .set('if-modified-since', '2046 8-14 13:52:38')
+    .expect(304, done);
   });
 
   it('isDir', function(done) {
-    local('', function(err, res) {
-      res.statusCode.should.be.equal(404);
-      done();
-    });
+    request(app.listen())
+    .get('')
+    .expect(404, done);
   });
 });
 
 describe('log option', function() {
-  before(function(done) {
-    server = http.createServer(serveSPM(root, {
+  before(function() {
+    app = http.createServer(serveSPM(root, {
       log: true
     }));
-    server.listen(port, done);
-  });
-  after(function() {
-    server && server.close();
   });
 
   it('normal', function(done) {
-    var log = console.log;
-    console.log = spy();
-    local('index.js', function() {
-      console.log.called.should.be.true;
-      console.log = log;
+    var log = spy(console, 'log');
+    request(app.listen())
+    .get('/index.js')
+    .end(function(err) {
+      should.not.exist(err);
+      log.called.should.be.true;
+      log.restore();
       done();
     });
   });
 });
 
 describe('servespmexit', function() {
-  var app = express();
-
-  app.use(serveSPM(root, {
+  var ep = express();
+  ep.use(serveSPM(root, {
     log: true
   }));
-  app.use(function(req, res, next) {
+  ep.use(function(req, res) {
     res.end('ok');
   });
 
-  before(function(done) {
-    server = http.createServer(app);
-    server.listen(port, done);
-  });
-  after(function() {
-    server && server.close();
+  before(function() {
+    app = http.createServer(ep);
   });
 
   it('without servespmexit header', function(done) {
-    local('a/0.1.0/notfound.js', function(err, res, body) {
-      res.statusCode.should.be.equal(200);
-      body.should.be.equal('ok');
-      done();
-    });
+    request(app.listen())
+    .get('/a/0.1.0/notfound.js')
+    .expect('ok')
+    .expect(200, done);
   });
 
   it('with servespmexit header', function(done) {
-    local('a/0.1.0/notfound.js', function(err, res) {
-      res.statusCode.should.be.equal(404);
-      done();
-    }, {headers:{'servespmexit':'1'}});
+    request(app.listen())
+    .get('/a/0.1.0/notfound.js')
+    .set('servespmexit', '1')
+    .expect(404, done);
   });
 });
 
 describe('root not exist', function() {
-  before(function(done) {
-    server = http.createServer(serveSPM(join(root, 'notfound'), {
+  before(function() {
+    app = http.createServer(serveSPM(join(root, 'notfound'), {
       log: true
     }));
-    server.listen(port, done);
-  });
-  after(function() {
-    server && server.close();
   });
 
   it('normal', function(done) {
-    local('index.js', function(err, res) {
-      res.statusCode.should.be.equal(404);
-      done();
-    });
+    request(app.listen())
+    .get('/index.js')
+    .expect(404, done);
   });
 });
-
-function local(pathname, cb, opts) {
-  var args = {
-    url: 'http://localhost:'+port+'/'+pathname
-  };
-  request(extend(args, opts), cb);
-}
