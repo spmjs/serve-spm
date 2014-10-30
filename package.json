@@ -20,7 +20,7 @@
     "url": "https://github.com/spmjs/serve-spm/issues"
   },
   "dependencies": {
-    "array-uniq": "^0.1.1",
+    "array-uniq": "~1.0.1",
     "css-imports": "^0.3.0",
     "extend": "^1.3.0",
     "father": "^0.9.6",
