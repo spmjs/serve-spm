@@ -2,6 +2,10 @@
 
 ---
 
+## 0.6.0
+
+- add support for koa, #9
+
 ## 0.5.11
 
 - fix require pkg file in devDependencies

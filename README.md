@@ -5,16 +5,24 @@
 [![Coverage Status](https://img.shields.io/coveralls/spmjs/serve-spm.svg?style=flat)](https://coveralls.io/r/spmjs/serve-spm)
 [![NPM downloads](http://img.shields.io/npm/dm/serve-spm.svg?style=flat)](https://npmjs.org/package/serve-spm)
 
-SPM middleware for debug.
+Middleware for spm debug, support connect, express and koa.
 
 ## Usage
 
-```javascript
-var express = require('express');
-var serveSPM = require('serve-spm');
+with express:
 
-var app = express();
-app.use(serveSPM(pkgRoot, {
+```javascript
+var serveSPM = require('serve-spm');
+require('express')().use(serveSPM(pkgRoot, {
+  log: true
+}));
+```
+
+with koa:
+
+```javascript
+var serveSPM = require('serve-spm').koa;
+require('koa')().use(serveSPM(pkgRoot, {
   log: true
 }));
 ```
