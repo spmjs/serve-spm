@@ -2,7 +2,7 @@ var join = require('path').join;
 var should = require('should');
 var request = require('supertest');
 var spy = require('spy');
-var util = require('../util');
+var util = require('../lib/util');
 var express = require('express');
 var expressMiddleware = require('../');
 var root = join(__dirname, 'fixtures/parser');
@@ -14,7 +14,7 @@ describe('express', function() {
 
 if (isSupportGenerator) {
   var koa = require('koa');
-  var koaMiddleware = require('../koa');
+  var koaMiddleware = require('../lib/koa');
   describe('koa', function() {
     wrap(koa, koaMiddleware);
   });

@@ -1,6 +1,6 @@
 var gutil = require('gulp-util');
-var handlebarsParser = require('../parser/handlebars');
-var util = require('../util');
+var handlebarsParser = require('../lib/parser/handlebars');
+var util = require('../lib/util');
 
 describe('handlebars', function() {
 

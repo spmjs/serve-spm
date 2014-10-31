@@ -1,8 +1,8 @@
 var join = require('path').join;
 var fs = require('fs');
 var gutil = require('gulp-util');
-var standalonifyParser = require('../parser/standalonify');
-var util = require('../util');
+var standalonifyParser = require('../lib/parser/standalonify');
+var util = require('../lib/util');
 
 describe('standalonify', function() {
 

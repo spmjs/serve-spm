@@ -2,8 +2,8 @@ var fs = require('fs');
 var join = require('path').join;
 var extend = require('extend');
 var touch = require('touch');
-var util = require('../util');
-var Parser = require('../parser');
+var util = require('../lib/util');
+var Parser = require('../lib/parser');
 var moduleDir = require('spmrc').get('install.path');
 
 describe('parser', function() {

@@ -1,6 +1,6 @@
 var gutil = require('gulp-util');
-var jsonParser = require('../parser/json');
-var util = require('../util');
+var jsonParser = require('../lib/parser/json');
+var util = require('../lib/util');
 
 describe('json', function() {
 

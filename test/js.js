@@ -1,6 +1,6 @@
 var gutil = require('gulp-util');
-var jsParser = require('../parser/js');
-var util = require('../util');
+var jsParser = require('../lib/parser/js');
+var util = require('../lib/util');
 
 describe('js', function() {
 

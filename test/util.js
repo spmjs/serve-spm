@@ -1,6 +1,6 @@
 var join = require('path').join;
 var touch = require('touch');
-var util = require('../util');
+var util = require('../lib/util');
 
 describe('util', function() {
 

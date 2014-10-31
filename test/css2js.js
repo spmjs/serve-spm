@@ -1,6 +1,6 @@
 var gutil = require('gulp-util');
-var css2jsParser = require('../parser/css2js');
-var util = require('../util');
+var css2jsParser = require('../lib/parser/css2js');
+var util = require('../lib/util');
 
 describe('css2js', function() {
 
