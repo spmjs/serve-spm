@@ -5,17 +5,20 @@ var spy = require('spy');
 var util = require('../util');
 var express = require('express');
 var expressMiddleware = require('../');
-var koa = require('koa');
-var koaMiddleware = require('../koa');
 var root = join(__dirname, 'fixtures/parser');
+var isSupportGenerator = require('generator-support');
 
 describe('express', function() {
   wrap(express, expressMiddleware);
 });
 
-describe('koa', function() {
-  wrap(koa, koaMiddleware);
-});
+if (isSupportGenerator) {
+  var koa = require('koa');
+  var koaMiddleware = require('../koa');
+  describe('koa', function() {
+    wrap(koa, koaMiddleware);
+  });
+}
 
 function wrap(server, middleware) {
   var app;
@@ -166,16 +169,13 @@ function wrap(server, middleware) {
       app.use(middleware(root, {
         log: true
       }));
-      if (server === koa) {
-        app.use(function*() {
-          this.body = 'ok';
-        });
+      if (isSupportGenerator && server === koa) {
+        app.use(require('./support/ok'));
       } else {
         app.use(function(req, res) {
           res.end('ok');
         });
       }
-
     });
 
     it('without servespmexit header', function(done) {

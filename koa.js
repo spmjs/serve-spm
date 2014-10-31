@@ -20,7 +20,6 @@ var standalonify = require('./parser/standalonify');
 var Parser = require('./parser');
 var util = require('./util');
 
-
 module.exports = function(root, opts) {
   opts = opts || {};
   return function*(next) {

@@ -30,6 +30,14 @@ module.exports = function(root, opts) {
 
 module.exports.util = util;
 
+if (require('generator-support')) {
+  module.exports.koa = require('./koa');
+} else {
+  module.exports.koa = function() {
+    throw new Error('Generator is not supported');
+  };
+}
+
 function parse(root, opts, req, res, next) {
   next = req.headers['servespmexit'] ? notFound : (next || notFound);
 

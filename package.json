@@ -38,7 +38,8 @@
     "semver": "~3.0.1",
     "spmrc": "^1.2.0",
     "strip-comments": "^0.2.0",
-    "through2": "^0.6.1"
+    "through2": "^0.6.1",
+    "generator-support": "~0.0.1"
   },
   "devDependencies": {
     "coveralls": "^2.10.0",
