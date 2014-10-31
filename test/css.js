@@ -1,5 +1,5 @@
 var gutil = require('gulp-util');
-var cssParser = require('../parser/css');
+var cssParser = require('../lib/parser/css');
 
 describe('css', function() {
 

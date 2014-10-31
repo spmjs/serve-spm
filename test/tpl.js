@@ -1,6 +1,6 @@
 var gutil = require('gulp-util');
-var tplParser = require('../parser/tpl');
-var util = require('../util');
+var tplParser = require('../lib/parser/tpl');
+var util = require('../lib/util');
 
 describe('tpl', function() {
 
