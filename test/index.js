@@ -33,7 +33,7 @@ function wrap(server, middleware) {
     it('normal', function(done) {
       request(app.listen())
       .get('/index.js')
-      .expect(util.define('var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n'))
+      .expect(util.define('var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n', 'index.js'))
       .expect(200, done);
     });
 
@@ -48,14 +48,14 @@ function wrap(server, middleware) {
     it('require pkg file in js', function(done) {
       request(app.listen())
       .get('/pkg-file.js')
-      .expect(util.define('require("b/0.1.0/path/to/file");\n'))
+      .expect(util.define('require("b/0.1.0/path/to/file");\n', 'pkg-file.js'))
       .expect(200, done);
     });
 
     it('require pkg file in js (devDependencies)', function(done) {
       request(app.listen())
       .get('/pkg-file-dev.js')
-      .expect(util.define('require("c/0.1.0/path/to/file");\n'))
+      .expect(util.define('require("c/0.1.0/path/to/file");\n', 'pkg-file-dev.js'))
       .expect(200, done);
     });
 
@@ -83,7 +83,7 @@ function wrap(server, middleware) {
     it('dep pkg', function(done) {
       request(app.listen())
       .get('/b/0.1.0/index.js')
-      .expect(util.define('console.log(\'b\');\n'))
+      .expect(util.define('console.log(\'b\');\n', 'b/0.1.0/index.js'))
       .expect(200, done);
     });
 
@@ -99,14 +99,14 @@ function wrap(server, middleware) {
       .expect(404, done);
     });
 
-    it('handlebars', function(done) {
+    xit('handlebars', function(done) {
       request(app.listen())
       .get('/dist/cjs/handlebars.runtime.js')
       .expect(/^define\("dist\/cjs\/handlebars.runtime"/)
       .expect(200, done);
     });
 
-    it('handlebars2', function(done) {
+    xit('handlebars2', function(done) {
       request(app.listen())
       .get('/handlebars-runtime.js')
       .expect(/^define\("handlebars-runtime"/)
@@ -134,7 +134,7 @@ function wrap(server, middleware) {
       .expect(304, done);
     });
 
-    it('isDir', function(done) {
+    xit('isDir', function(done) {
       request(app.listen())
       .get('')
       .expect(404, done);
@@ -142,15 +142,13 @@ function wrap(server, middleware) {
   });
 
   describe('log option', function() {
-    before(function() {
-      app = server();
-      app.use(middleware(root, {
-        log: true
-      }));
-    });
 
     it('normal', function(done) {
-      var log = spy(console, 'log');
+      var log = spy();
+      app = server();
+      app.use(middleware(root, {
+        log: log
+      }));
       request(app.listen())
       .get('/index.js')
       .end(function(err) {
@@ -196,9 +194,7 @@ function wrap(server, middleware) {
   describe('root not exist', function() {
     before(function() {
       app = server();
-      app.use(middleware(join(root, 'notfound'), {
-        log: true
-      }));
+      app.use(middleware(join(root, 'notfound')));
     });
 
     it('normal', function(done) {

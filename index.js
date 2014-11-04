@@ -1,11 +1,5 @@
 
-module.exports = function(root, opts) {
-  return function() {
-    var args = Array.prototype.concat.apply([root, opts || {}], arguments);
-    require('./lib/express').apply(this, args);
-  };
-};
-
+module.exports = require('./lib/express');
 module.exports.util = require('./lib/util');
 
 if (require('generator-support')) {

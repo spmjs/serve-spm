@@ -28,23 +28,23 @@ describe('util', function() {
     );
   });
 
-  it('getPkg', function() {
+  it('getPackage', function() {
     var root = join(__dirname, 'fixtures/getpkg');
 
-    var p1 = util.getPkg(root);
+    var p1 = util.getPackage(root);
     p1.name.should.be.equal('a');
     p1.version.should.be.equal('0.1.0');
 
-    var p2 = util.getPkg(root);
+    var p2 = util.getPackage(root);
     p2.should.be.equal(p1);
 
     touch.sync(join(root, 'package.json'));
-    var p3 = util.getPkg(root);
+    var p3 = util.getPackage(root);
     p3.should.not.be.equal(p1);
     p3.name.should.be.equal('a');
     p3.version.should.be.equal('0.1.0');
 
-    var p4 = util.getPkg(join(root, 'notfound'));
+    var p4 = util.getPackage(join(root, 'notfound'));
     (p4 === null).should.be.true;
   });
 

@@ -1,4 +1,3 @@
-var gutil = require('gulp-util');
 var jsParser = require('../lib/parser/js');
 var util = require('../lib/util');
 
@@ -26,9 +25,9 @@ describe('js', function() {
     var pkg = {
       dependencies: {
         'b': {
-          "name": "b",
-          "version": "0.1.0",
-          "main": "index.js"
+          name: 'b',
+          version: '0.1.0',
+          main: 'index.js'
         }
       }
     };
@@ -40,9 +39,12 @@ describe('js', function() {
       String(newFile.contents).should.be.equal(expected);
       done();
     });
-    stream.write(new gutil.File({
+    stream.write({
+      url: {
+        pathname: ''
+      },
       contents: new Buffer(origin)
-    }));
+    });
 
   });
 });
