@@ -21,7 +21,7 @@ describe('util', function() {
         '\n});\n'
     );
 
-    util.define('alert(1);', 'id').should.be.equal(
+    util.define('id', 'alert(1);').should.be.equal(
         'define(\'id\', function(require, exports, module){\n' +
         'alert(1);' +
         '\n});\n'

@@ -40,11 +40,9 @@ describe('js', function() {
       done();
     });
     stream.write({
-      url: {
-        pathname: ''
-      },
+      url: {pathname: ''},
       contents: new Buffer(origin)
     });
-
+    stream.end();
   });
 });

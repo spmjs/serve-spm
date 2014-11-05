@@ -1,4 +1,3 @@
-var gutil = require('gulp-util');
 var handlebarsParser = require('../lib/parser/handlebars');
 var util = require('../lib/util');
 
@@ -24,10 +23,11 @@ describe('handlebars', function() {
       String(newFile.contents).should.be.equal(expected);
       done();
     });
-    stream.write(new gutil.File({
+    stream.write({
+      url: {pathname: ''},
       contents: new Buffer(origin)
-    }));
-
+    });
+    stream.end();
   });
 
   it('version error', function(done) {
@@ -49,12 +49,11 @@ describe('handlebars', function() {
       e.message.should.be.equal('handlebars version should be 1.3.0 but 1.4.0');
       done();
     });
-    stream.on('data', function(newFile) {
-    });
-    stream.write(new gutil.File({
+    stream.write({
+      url: {pathname: ''},
       contents: new Buffer(origin)
-    }));
-
+    });
+    stream.end();
   });
 
   it('handlebars-runtime not found', function(done) {
@@ -73,11 +72,11 @@ describe('handlebars', function() {
       e.message.should.be.equal('handlebars-runtime not found in dependencies');
       done();
     });
-    stream.on('data', function(newFile) {
-    });
-    stream.write(new gutil.File({
+    stream.write({
+      url: {pathname: ''},
       contents: new Buffer(origin)
-    }));
+    });
+    stream.end();
 
   });
 });

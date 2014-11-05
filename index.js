@@ -2,6 +2,7 @@
 module.exports = require('./lib/express');
 module.exports.util = require('./lib/util');
 
+/* istanbul ignore else */
 if (require('generator-support')) {
   module.exports.koa = require('./lib/koa');
 } else {

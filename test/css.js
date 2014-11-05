@@ -1,4 +1,3 @@
-var gutil = require('gulp-util');
 var cssParser = require('../lib/parser/css');
 
 describe('css', function() {
@@ -25,9 +24,11 @@ describe('css', function() {
       String(newFile.contents).should.be.equal(expected);
       done();
     });
-    stream.write(new gutil.File({
+    stream.write({
+      url: {pathname: ''},
       contents: new Buffer(origin)
-    }));
+    });
+    stream.end();
 
   });
 });

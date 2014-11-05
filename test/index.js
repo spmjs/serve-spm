@@ -5,7 +5,7 @@ var spy = require('spy');
 var util = require('../lib/util');
 var express = require('express');
 var expressMiddleware = require('../');
-var root = join(__dirname, 'fixtures/parser');
+var fixtures = join(__dirname, 'fixtures');
 var isSupportGenerator = require('generator-support');
 
 describe('express', function() {
@@ -23,80 +23,157 @@ if (isSupportGenerator) {
 function wrap(server, middleware) {
   var app;
 
-  describe('index', function() {
+  describe('html', function() {
 
     before(function() {
       app = server();
-      app.use(middleware(root));
+      app.use(middleware(join(fixtures, 'htm')));
     });
 
-    it('normal', function(done) {
+    it('should match index.html when request /', function(done) {
+      request(app.listen())
+      .get('/')
+      .expect('<div>html</div>\n')
+      .expect(200, done);
+    });
+
+    it('should match index.htm when request /htm/', function(done) {
+      request(app.listen())
+      .get('/htm/')
+      .expect('<div>htm</div>\n')
+      .expect(200, done);
+    });
+  });
+
+  describe('self package', function() {
+
+    before(function() {
+      app = server();
+      app.use(middleware(join(fixtures, 'parser')));
+    });
+
+    it('should match /index.js -> /index.js, wrap', function(done) {
       request(app.listen())
       .get('/index.js')
-      .expect(util.define('var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n', 'index.js'))
+      .expect(util.define('index', 'var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n'))
       .expect(200, done);
     });
 
-    it('transportId only in root entries and with id_leading prefix request', function(done) {
-      var id = 'a/0.1.0/index.js';
+    it('should match /dist/a/0.1.0/index.js -> /index.js, wrap', function(done) {
       request(app.listen())
-      .get('/' + id)
-      .expect(util.define('var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n', id))
+      .get('/dist/a/0.1.0/index.js')
+      .expect(util.define('dist/a/0.1.0/index', 'var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n'))
       .expect(200, done);
     });
 
-    it('require pkg file in js', function(done) {
+    it('should match /a/0.1.0/index.js -> /index.js, wrap', function(done) {
+      request(app.listen())
+      .get('/a/0.1.0/index.js')
+      .expect(util.define('a/0.1.0/index', 'var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n'))
+      .expect(200, done);
+    });
+
+    it('should match /a/0.1.0/i.js -> /dist/a/0.1.0/i.js, nowrap', function(done) {
+      request(app.listen())
+      .get('/a/0.1.0/i.js')
+      .expect('define(\'a/0.1.0/i\', function(require, exports, module){\n  console.log(\'i\');\n});\n')
+      .expect(200, done);
+    });
+
+    it('should match /pkg-file.js -> /pkg-file.js, required package in dependencies', function(done) {
       request(app.listen())
       .get('/pkg-file.js')
-      .expect(util.define('require("b/0.1.0/path/to/file");\n', 'pkg-file.js'))
+      .expect(util.define('pkg-file', 'require("b/0.1.0/path/to/file");\n'))
       .expect(200, done);
     });
 
-    it('require pkg file in js (devDependencies)', function(done) {
+    it('should match /pkg-file-dev.js -> /pkg-file-dev.js, required package in devDependencies', function(done) {
       request(app.listen())
       .get('/pkg-file-dev.js')
-      .expect(util.define('require("c/0.1.0/path/to/file");\n', 'pkg-file-dev.js'))
+      .expect(util.define('pkg-file-dev', 'require("c/0.1.0/path/to/file");\n'))
       .expect(200, done);
     });
 
-    it('import pkg file in css', function(done) {
+    it('should match /pkg-file.css -> /pkg-file.css, required package in dependencies', function(done) {
       request(app.listen())
       .get('/pkg-file.css')
       .expect('@import "/b/0.1.0/a/b.css";\n')
       .expect(200, done);
     });
 
-    it('import pkg file in css (devDependencies)', function(done) {
+    it('should match /pkg-file-dev.css -> /pkg-file-dev.css, required package in devDependencies', function(done) {
       request(app.listen())
       .get('/pkg-file-dev.css')
       .expect('@import "/c/0.1.0/a/b.css";\n')
       .expect(200, done);
     });
 
-    it('nowrap', function(done) {
+    it('should match .json', function(done) {
       request(app.listen())
-      .get('/index.js?nowrap')
-      .expect('var b = require(\'b\');\nconsole.log(\'a\');\n')
+      .get('/a/0.1.0/g.json')
+      .expect(util.define('a/0.1.0/g.json', 'module.exports = {"a":1};'))
       .expect(200, done);
     });
 
-    it('dep pkg', function(done) {
+    it('should match .tpl', function(done) {
+      request(app.listen())
+      .get('/a/0.1.0/h.tpl')
+      .expect(util.define('a/0.1.0/h.tpl', 'module.exports = \'<div id="h">\'</div>\';'))
+      .expect(200, done);
+    });
+
+    it('should match .css.js', function(done) {
+      request(app.listen())
+      .get('/a/0.1.0/a.css.js')
+      .expect(util.define('a/0.1.0/a.css.js' , 'seajs.importStyle(\'h1{color:red;}\');'))
+      .expect(200, done);
+    });
+
+    it('should match .less', function(done) {
+      request(app.listen())
+      .get('/a/0.1.0/c.css')
+      .expect('a {\n  color: #428bca;\n}\n')
+      .expect(200, done);
+    });
+
+    it('should not match notfound.js', function(done) {
+      request(app.listen())
+      .get('/notfound.js')
+      .expect(404, done);
+    });
+
+    it('should not match notfound.css.js', function(done) {
+      request(app.listen())
+      .get('/notfound.css.js')
+      .expect(404, done);
+    });
+  });
+
+  describe('dependent package', function() {
+
+    before(function() {
+      app = server();
+      app.use(middleware(join(fixtures, 'parser')));
+    });
+
+    it('should match /b/0.1.0/index.js -> /spm_modules/b/0.1.0/index.js', function(done) {
       request(app.listen())
       .get('/b/0.1.0/index.js')
-      .expect(util.define('console.log(\'b\');\n', 'b/0.1.0/index.js'))
+      .expect(util.define('b/0.1.0/index', 'console.log(\'b\');\n'))
       .expect(200, done);
     });
 
-    it('dep pkg but not found', function(done) {
+    it('should not match no exist file', function(done) {
       request(app.listen())
       .get('/notfound/0.1.0/index.js')
       .expect(404, done);
     });
 
-    it('file not found', function(done) {
+    it('should match /b/0.1.0/b.tpl -> /spm_modules/b/0.1.0/b.tpl', function(done) {
       request(app.listen())
-      .get('/notfound.js')
-      .expect(404, done);
+      .get('/b/0.1.0/b.tpl')
+      .expect(util.define('b/0.1.0/b.tpl', 'module.exports = \'<div></div>\';'))
+      .expect(200, done);
     });
 
     xit('handlebars', function(done) {
@@ -112,32 +189,20 @@ function wrap(server, middleware) {
       .expect(/^define\("handlebars-runtime"/)
       .expect(200, done);
     });
+  });
 
-    it('tpl', function(done) {
+  describe('nowrap', function() {
+
+    before(function() {
+      app = server();
+      app.use(middleware(join(fixtures, 'parser')));
+    });
+
+    it('should not contain define', function(done) {
       request(app.listen())
-      .get('/g.json')
-      .expect(util.define('module.exports = {"a":1};'))
+      .get('/index.js?nowrap')
+      .expect('var b = require(\'b\');\nconsole.log(\'a\');\n')
       .expect(200, done);
-    });
-
-    it('css.js', function(done) {
-      request(app.listen())
-      .get('/a.css.js')
-      .expect(util.define('seajs.importStyle(\'h1{color:red;}\');'))
-      .expect(200, done);
-    });
-
-    it('isModified', function(done) {
-      request(app.listen())
-      .get('/index.js')
-      .set('if-modified-since', '2046 8-14 13:52:38')
-      .expect(304, done);
-    });
-
-    xit('isDir', function(done) {
-      request(app.listen())
-      .get('')
-      .expect(404, done);
     });
   });
 
@@ -146,7 +211,7 @@ function wrap(server, middleware) {
     it('normal', function(done) {
       var log = spy();
       app = server();
-      app.use(middleware(root, {
+      app.use(middleware(join(fixtures, 'parser'), {
         log: log
       }));
       request(app.listen())
@@ -164,7 +229,7 @@ function wrap(server, middleware) {
 
     before(function() {
       app = server();
-      app.use(middleware(root, {
+      app.use(middleware(join(fixtures, 'parser'), {
         log: true
       }));
       if (isSupportGenerator && server === koa) {
@@ -191,10 +256,22 @@ function wrap(server, middleware) {
     });
   });
 
+  describe('sea-modules', function() {
+
+    it('should return correct', function(done) {
+      app = server();
+      app.use(middleware(join(fixtures, 'parser_seamodules')));
+      request(app.listen())
+      .get('/index.js')
+      .expect(util.define('index.js', 'var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n'))
+      .expect(200, done);
+    });
+  });
+
   describe('root not exist', function() {
     before(function() {
       app = server();
-      app.use(middleware(join(root, 'notfound')));
+      app.use(middleware(join(fixtures, 'notfound')));
     });
 
     it('normal', function(done) {
@@ -202,5 +279,35 @@ function wrap(server, middleware) {
       .get('/index.js')
       .expect(404, done);
     });
+  });
+
+  describe('custom rules', function() {
+
+    before(function() {
+      app = server();
+      app.use(middleware(join(fixtures, 'parser'), {
+        rules: [function(url, pkg) {
+          return {
+            path: join(pkg.dest, url.pathname.substring(4))
+          };
+        }]
+      }));
+    });
+
+    it('should match /app/index.js -> /index.js', function(done) {
+      request(app.listen())
+      .get('/app/index.js')
+      .expect(util.define('app/index', 'var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n'))
+      .expect(200, done);
+    });
+  });
+
+  it('isModified', function(done) {
+    app = server();
+    app.use(middleware(join(fixtures, 'parser')));
+    request(app.listen())
+    .get('/index.js')
+    .set('if-modified-since', '2046 8-14 13:52:38')
+    .expect(304, done);
   });
 }
