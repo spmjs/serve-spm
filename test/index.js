@@ -302,6 +302,29 @@ function wrap(server, middleware) {
     });
   });
 
+  describe('standalone', function() {
+
+    before(function() {
+      app = server();
+      app.use(middleware(join(fixtures, 'standalone')));
+    });
+
+    it('with standalone', function(done) {
+      request(app.listen())
+      .get('/index.js')
+      .expect(/\ndefine\(\'index\', function\(require, exports, module\)\{\nmodule.exports = function\(\) \{\n  require\(\'.\/noentry\'\);\n  console.log\(\'standalone\'\);\n\};\n\n\}\);\n/)
+      .expect(/\/\*\! Sea.js Init \*\/\nseajs.use\(\'\/index.js\'\);\n$/)
+      .expect(200, done);
+    });
+
+    it('no entry', function(done) {
+      request(app.listen())
+      .get('/noentry.js')
+      .expect('define(\'noentry\', function(require, exports, module){\nconsole.log(\'no entry\');\n\n});\n')
+      .expect(200, done);
+    });
+  });
+
   it('isModified', function(done) {
     app = server();
     app.use(middleware(join(fixtures, 'parser')));
