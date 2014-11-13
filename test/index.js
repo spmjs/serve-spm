@@ -129,6 +129,14 @@ function wrap(server, middleware) {
       .expect(200, done);
     });
 
+    it('should match .handlebars', function(done) {
+      request(app.listen())
+      .get('/a/0.1.0/i.handlebars')
+      .expect(/^define\(\'a\/0\.1\.0\/i\.handlebars\', function\(/)
+      .expect(/Handlebars = require\(\"handlebars-runtime\/1\.3\.0\/dist\/cjs\/handlebars\.runtime\.js\"\)\[\"default\"\];/)
+      .expect(200, done);
+    });
+
     it('should match .css.js', function(done) {
       request(app.listen())
       .get('/a/0.1.0/a.css.js')
@@ -183,17 +191,10 @@ function wrap(server, middleware) {
       .expect(200, done);
     });
 
-    xit('handlebars', function(done) {
+    it('should match handlebars', function(done) {
       request(app.listen())
-      .get('/dist/cjs/handlebars.runtime.js')
-      .expect(/^define\("dist\/cjs\/handlebars.runtime"/)
-      .expect(200, done);
-    });
-
-    xit('handlebars2', function(done) {
-      request(app.listen())
-      .get('/handlebars-runtime.js')
-      .expect(/^define\("handlebars-runtime"/)
+      .get('/handlebars-runtime/1.3.0/dist/cjs/handlebars.runtime.js')
+      .expect(/^define\(\'handlebars-runtime\/1\.3\.0\/dist\/cjs\/handlebars\.runtime\', function/)
       .expect(200, done);
     });
   });
