@@ -59,6 +59,13 @@ function wrap(server, middleware) {
       .expect(200, done);
     });
 
+    it('should match /camelCase.js -> /camelCase.js, wrap', function(done) {
+      request(app.listen())
+      .get('/camelCase.js')
+      .expect(util.define('camelCase', 'console.log(\'camelCase\');\n'))
+      .expect(200, done);
+    });
+
     it('should match /dist/a/0.1.0/index.js -> /index.js, wrap', function(done) {
       request(app.listen())
       .get('/dist/a/0.1.0/index.js')
