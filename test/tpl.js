@@ -1,4 +1,3 @@
-var gutil = require('gulp-util');
 var tplParser = require('../lib/parser/tpl');
 var util = require('../lib/util');
 
@@ -8,16 +7,17 @@ describe('tpl', function() {
 
     var origin = '{{a}}\n\r\'\"';
     var expected = util.define('module.exports = \'' +
-      '{{a}}\"\"\';');
+      '{{a}}\'\"\';');
 
     var stream = tplParser();
     stream.on('data', function(newFile) {
       String(newFile.contents).should.be.equal(expected);
       done();
     });
-    stream.write(new gutil.File({
+    stream.write({
+      url: {pathname: ''},
       contents: new Buffer(origin)
-    }));
-
+    });
+    stream.end();
   });
 });

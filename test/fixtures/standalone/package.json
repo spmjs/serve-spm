@@ -1,0 +1,7 @@
+{
+  "name": "standalone",
+  "version": "1.0.0",
+  "spm": {
+    "buildArgs": "--include standalone"
+  }
+}
