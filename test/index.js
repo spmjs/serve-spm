@@ -199,6 +199,29 @@ function wrap(server, middleware) {
     });
   });
 
+  describe('indirect dependent package', function() {
+
+    before(function() {
+      app = server();
+      app.use(middleware(join(fixtures, 'indirect-dep')));
+    });
+
+    it('should transport id for css', function(done) {
+      request(app.listen())
+      .get('/b/0.1.0/index.css')
+      .expect(/^@import \"\/c\/0\.1\.0\/index.js\";/)
+      .expect(200, done);
+    });
+
+    it('should transport id for js', function(done) {
+      request(app.listen())
+      .get('/b/0.1.0/index.js')
+      .expect(/require\(\"c\/0\.1\.0\/index.js\"\);/)
+      .expect(200, done);
+    });
+
+  });
+
   describe('nowrap', function() {
 
     before(function() {
