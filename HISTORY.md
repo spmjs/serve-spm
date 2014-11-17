@@ -2,6 +2,11 @@
 
 ---
 
+## 0.7.0
+
+- refactor and abstract parser, #14
+- fix indirect dep id transport, spmjs/spm/issues/1069
+
 ## 0.6.0
 
 - add support for koa, #9
