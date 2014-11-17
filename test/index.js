@@ -104,14 +104,14 @@ function wrap(server, middleware) {
     it('should match /pkg-file.css -> /pkg-file.css, required package in dependencies', function(done) {
       request(app.listen())
       .get('/pkg-file.css')
-      .expect('@import "/b/0.1.0/a/b.css";\n')
+      .expect('@import "../../b/0.1.0/a/b.css";\n')
       .expect(200, done);
     });
 
     it('should match /pkg-file-dev.css -> /pkg-file-dev.css, required package in devDependencies', function(done) {
       request(app.listen())
       .get('/pkg-file-dev.css')
-      .expect('@import "/c/0.1.0/a/b.css";\n')
+      .expect('@import "../../c/0.1.0/a/b.css";\n')
       .expect(200, done);
     });
 
@@ -209,7 +209,7 @@ function wrap(server, middleware) {
     it('should transport id for css', function(done) {
       request(app.listen())
       .get('/b/0.1.0/index.css')
-      .expect(/^@import \"\/c\/0\.1\.0\/index.js\";/)
+      .expect(/^@import \"\.\.\/\.\.\/c\/0\.1\.0\/index.js\";/)
       .expect(200, done);
     });
 
@@ -217,6 +217,26 @@ function wrap(server, middleware) {
       request(app.listen())
       .get('/b/0.1.0/index.js')
       .expect(/require\(\"c\/0\.1\.0\/index.js\"\);/)
+      .expect(200, done);
+    });
+
+  });
+
+  describe('paths', function() {
+
+    before(function() {
+      app = server();
+      app.use(middleware(join(fixtures, 'parser'), {
+        paths: [
+          ['/docs', '']
+        ]
+      }));
+    });
+
+    it('should match /docs/index.js -> /index.js, wrap', function(done) {
+      request(app.listen())
+      .get('/docs/index.js')
+      .expect(util.define('index', 'var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n'))
       .expect(200, done);
     });
 
