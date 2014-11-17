@@ -2,6 +2,10 @@
 
 ---
 
+## 0.7.1
+
+- add paths feature back, which is missed in `parser refactor`
+
 ## 0.7.0
 
 - refactor and abstract parser, #14
