@@ -2,6 +2,10 @@
 
 ---
 
+## 0.7.2
+
+- fix testcase failed in koa (node 11)
+
 ## 0.7.1
 
 - add paths feature back, which is missed in `parser refactor`
