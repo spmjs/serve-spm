@@ -52,6 +52,12 @@ function wrap(server, middleware) {
       app.use(middleware(join(fixtures, 'parser')));
     });
 
+    it('should not handle directory', function(done) {
+      request(app.listen())
+      .get('/')
+      .expect(404, done);
+    });
+
     it('should match /index.js -> /index.js, wrap', function(done) {
       request(app.listen())
       .get('/index.js')
