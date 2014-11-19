@@ -2,6 +2,10 @@
 
 ---
 
+## 0.7.3
+
+- don't handle directory
+
 ## 0.7.2
 
 - fix testcase failed in koa (node 11)
