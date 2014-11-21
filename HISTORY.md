@@ -2,6 +2,10 @@
 
 ---
 
+## 0.7.4
+
+- add rootPkg param to rule function
+
 ## 0.7.3
 
 - don't handle directory
