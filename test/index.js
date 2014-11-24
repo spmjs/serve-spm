@@ -370,7 +370,7 @@ function wrap(server, middleware) {
       request(app.listen())
       .get('/index.js')
       .expect(/\ndefine\(\'index\', function\(require, exports, module\)\{\nmodule.exports = function\(\) \{\n  require\(\'.\/noentry\'\);\n  console.log\(\'standalone\'\);\n\};\n\n\}\);\n/)
-      .expect(/\/\*\! Sea.js Init \*\/\nseajs.use\(\'\/index.js\'\);\n$/)
+      .expect(/\/\*\! Init \*\/\ng_spm_init\(\'\/index.js\'\);\n$/)
       .expect(200, done);
     });
 
