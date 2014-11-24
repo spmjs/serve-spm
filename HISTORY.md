@@ -2,6 +2,10 @@
 
 ---
 
+## 0.7.5
+
+- support multiple entry with standalone mode, Fix spmjs/spm-server/issues/10
+
 ## 0.7.4
 
 - add rootPkg param to rule function
