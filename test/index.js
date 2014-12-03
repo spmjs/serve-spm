@@ -282,37 +282,6 @@ function wrap(server, middleware) {
     });
   });
 
-  describe('servespmexit', function() {
-
-    before(function() {
-      app = server();
-      app.use(middleware(join(fixtures, 'parser'), {
-        log: true
-      }));
-      if (isSupportGenerator && server === koa) {
-        app.use(require('./support/ok'));
-      } else {
-        app.use(function(req, res) {
-          res.end('ok');
-        });
-      }
-    });
-
-    it('without servespmexit header', function(done) {
-      request(app.listen())
-      .get('/a/0.1.0/notfound.js')
-      .expect('ok')
-      .expect(200, done);
-    });
-
-    it('with servespmexit header', function(done) {
-      request(app.listen())
-      .get('/a/0.1.0/notfound.js')
-      .set('servespmexit', '1')
-      .expect(404, done);
-    });
-  });
-
   describe('sea-modules', function() {
 
     it('should return correct', function(done) {
