@@ -2,6 +2,11 @@
 
 ---
 
+## 0.7.7
+
+- through error when parse pkg error
+- fix(middleware): file path may not exist
+
 ## 0.7.6
 
 - support body pass in (koa only)
