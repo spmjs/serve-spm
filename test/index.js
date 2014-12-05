@@ -359,4 +359,13 @@ function wrap(server, middleware) {
     .set('if-modified-since', '2046 8-14 13:52:38')
     .expect(304, done);
   });
+
+  it('jsx', function(done) {
+    app = server();
+    app.use(middleware(join(fixtures, 'parser')));
+    request(app.listen())
+    .get('/react.js')
+    .expect('define(\'react\', function(require, exports, module){\n/** @jsx React.DOM */\n\n(React.createElement("li", {onClick: this.handlClick}));\n\n});\n')
+    .expect(200, done);
+  });
 }
