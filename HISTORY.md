@@ -2,6 +2,10 @@
 
 ---
 
+## 0.7.8
+
+- support jsx transform (react)
+
 ## 0.7.7
 
 - through error when parse pkg error
