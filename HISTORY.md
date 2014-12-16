@@ -2,6 +2,11 @@
 
 ---
 
+## 0.7.10
+
+- custom rule have high priority than default rules
+- support ignore for replacing package name
+
 ## 0.7.9
 
 - upgrade father to 0.10
