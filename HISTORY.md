@@ -2,6 +2,10 @@
 
 ---
 
+## 0.7.9
+
+- upgrade father to 0.10
+
 ## 0.7.8
 
 - support jsx transform (react)
