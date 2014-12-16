@@ -33,7 +33,8 @@ describe('js', function() {
     };
 
     var stream = jsParser({
-      pkg: pkg
+      pkg: pkg,
+      ignore: []
     });
     stream.on('data', function(newFile) {
       String(newFile.contents).should.be.equal(expected);
