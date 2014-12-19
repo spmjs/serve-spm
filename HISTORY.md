@@ -2,6 +2,10 @@
 
 ---
 
+## 0.7.12
+
+- fix buildArgs parse broken with father@0.10.4, [#22](https://github.com/spmjs/serve-spm/pull/22)
+
 ## 0.7.10
 
 - custom rule have high priority than default rules
