@@ -2,6 +2,10 @@
 
 ---
 
+## 0.7.13
+
+- test coffee and less file before itself
+
 ## 0.7.12
 
 - fix buildArgs parse broken with father@0.10.4, [#22](https://github.com/spmjs/serve-spm/pull/22)
