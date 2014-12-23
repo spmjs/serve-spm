@@ -152,9 +152,16 @@ function wrap(server, middleware) {
 
     it('should match .less', function(done) {
       request(app.listen())
-      .get('/a/0.1.0/c.css')
-      .expect('a {\n  color: #428bca;\n}\n')
-      .expect(200, done);
+        .get('/a/0.1.0/c.css')
+        .expect('a {\n  color: #428bca;\n}\n')
+        .expect(200, done);
+    });
+
+    it('should match .less before match .css', function(done) {
+      request(app.listen())
+        .get('/a/0.1.0/j.css')
+        .expect('body {\n  color: red;\n}\n')
+        .expect(200, done);
     });
 
     it('should not match notfound.js', function(done) {
