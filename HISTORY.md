@@ -2,6 +2,10 @@
 
 ---
 
+## 0.7.14
+
+feat(parser) test require files like nodejs
+
 ## 0.7.13
 
 - test coffee and less file before itself
