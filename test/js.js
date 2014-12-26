@@ -27,7 +27,8 @@ describe('js', function() {
         'b': {
           name: 'b',
           version: '0.1.0',
-          main: 'index.js'
+          main: 'index.js',
+          dest: '/tmp'
         }
       }
     };
@@ -42,7 +43,8 @@ describe('js', function() {
     });
     stream.write({
       url: {pathname: ''},
-      contents: new Buffer(origin)
+      contents: new Buffer(origin),
+      path: '/tmp'
     });
     stream.end();
   });
