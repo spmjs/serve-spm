@@ -2,6 +2,10 @@
 
 ---
 
+## 0.7.15
+
+fix(css) fix css path prefix
+
 ## 0.7.14
 
 feat(parser) test require files like nodejs
