@@ -5,7 +5,7 @@ describe('css', function() {
   it('normal', function(done) {
 
     var origin = '@import "b";@import "./c";';
-    var expected = '@import "/b/0.1.0/index.css";@import "./c";';
+    var expected = '@import "b/0.1.0/index.css";@import "./c";';
 
     var pkg = {
       dependencies: {
