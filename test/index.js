@@ -179,7 +179,7 @@ function wrap(server, middleware) {
     it('should testfile like nodejs', function(done) {
       request(app.listen())
         .get('/testfile/index.js')
-        .expect(util.define('testfile/index.js' , 'require("../index.js");\nrequire(\'./a\');\nrequire("./b/index.js");\nrequire("b/0.1.0/index.js");\nrequire("b/0.1.0/testfile/index.js");\n'))
+        .expect(util.define('testfile/index.js' , 'require("../index");\nrequire(\'./a\');\nrequire("./b/index");\nrequire("b/0.1.0/index.js");\nrequire("b/0.1.0/testfile/index.js");\n'))
         .expect(200, done);
     });
   });
