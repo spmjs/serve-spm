@@ -382,4 +382,14 @@ function wrap(server, middleware) {
     .expect('define(\'react\', function(require, exports, module){\n/** @jsx React.DOM */\n\n(React.createElement("li", {onClick: this.handlClick}));\n\n});\n')
     .expect(200, done);
   });
+
+  it('xhr', function(done) {
+    app = server();
+    app.use(middleware(join(fixtures, 'parser')));
+    request(app.listen())
+      .get('/package.json')
+      .set('X-Requested-With', 'XMLHttpRequest')
+      .expect('{\n  "name": "a",\n  "version": "0.1.0",\n  "spm": {\n    "dependencies": {\n      "b": "0.1.0",\n      "handlebars-runtime": "1.3.0"\n    },\n    "devDependencies": {\n      "c": "0.1.0"\n    },\n    "output": [\n      "index.js"\n    ]\n  }\n}\n')
+      .expect(200, done);
+  });
 }
