@@ -179,7 +179,7 @@ function wrap(server, middleware) {
     it('should testfile like nodejs', function(done) {
       request(app.listen())
         .get('/testfile/index.js')
-        .expect(util.define('testfile/index.js' , 'require("../index.js");\nrequire(\'./a\');\nrequire("./b/index.js");\nrequire("b/0.1.0/index.js");\nrequire("b/0.1.0/testfile/index.js");\n'))
+        .expect(util.define('testfile/index.js' , 'require("../index.js");\nrequire("./a.js");\nrequire("./b/index.js");\nrequire("b/0.1.0/index.js");\nrequire("b/0.1.0/testfile/index.js");\n'))
         .expect(200, done);
     });
   });
@@ -352,7 +352,7 @@ function wrap(server, middleware) {
     it('with standalone', function(done) {
       request(app.listen())
       .get('/index.js')
-      .expect(/\ndefine\(\'index\', function\(require, exports, module\)\{\nmodule.exports = function\(\) \{\n  require\(\'.\/noentry\'\);\n  console.log\(\'standalone\'\);\n\};\n\n\}\);\n/)
+      .expect(/\ndefine\(\'index\', function\(require, exports, module\)\{\nmodule.exports = function\(\) \{\n  require\(\".\/noentry\.js\"\);\n  console.log\(\'standalone\'\);\n\};\n\n\}\);\n/)
       .expect(/\/\*\! Init \*\/\ng_spm_init\(\'\/index.js\'\);\n$/)
       .expect(200, done);
     });
