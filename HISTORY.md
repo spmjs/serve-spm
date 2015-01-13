@@ -2,6 +2,13 @@
 
 ---
 
+## 0.8.0
+
+- feat(middleware) no cache by default, enable using `cache` opt, Fix [#25](https://github.com/spmjs/serve-spm/issues/25)
+- feat(xhr) don't wrap xhr requests, Fix [#24](https://github.com/spmjs/serve-spm/issues/24)
+- fix(parser) path wrong in win7 when parsing pkg inner files, Fix [spmjs/spm#1142](https://github.com/spmjs/spm/issues/1142)
+- fix(parser) path wrong when has same name file and directory, Fix [#23](https://github.com/spmjs/serve-spm/issues/23)
+
 ## 0.7.15
 
 fix(css) fix css path prefix
