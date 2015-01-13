@@ -2,6 +2,11 @@
 
 ---
 
+## 0.8.1
+
+- feat(util) add red color for console.error msg, Fix [spmjs/spm-server#15](https://github.com/spmjs/spm-server/issues/15)
+- fix(util) resolve output dymatically, Fix [spmjs/spm-server#14](https://github.com/spmjs/spm-server/issues/14)
+
 ## 0.8.0
 
 - feat(middleware) no cache by default, enable using `cache` opt, Fix [#25](https://github.com/spmjs/serve-spm/issues/25)
