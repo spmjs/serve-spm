@@ -37,6 +37,10 @@ Enable log for requests, default `false`.
 
 Map pathname for debug. e.g. `paths: [['/a/b/c/', '']]`
 
+### cache
+
+Enable 304 cache.
+
 ## LICENSE
 
 Copyright (c) 2014 sorrycc. Licensed under the MIT license.

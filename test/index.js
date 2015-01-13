@@ -365,9 +365,17 @@ function wrap(server, middleware) {
     });
   });
 
-  it('isModified', function(done) {
+  it('isModified disable', function(done) {
     app = server();
     app.use(middleware(join(fixtures, 'parser')));
+    request(app.listen())
+    .get('/index.js')
+    .expect(200, done);
+  });
+
+  it('isModified enable', function(done) {
+    app = server();
+    app.use(middleware(join(fixtures, 'parser'), {cache:true}));
     request(app.listen())
     .get('/index.js')
     .set('if-modified-since', '2046 8-14 13:52:38')
