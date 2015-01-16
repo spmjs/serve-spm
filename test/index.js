@@ -184,6 +184,23 @@ function wrap(server, middleware) {
     });
   });
 
+  describe('self package with base', function() {
+
+    before(function () {
+      app = server();
+      app.use(middleware(join(fixtures, 'parser'), {
+        base: 'http://a.com/base/'
+      }));
+    });
+
+    it('should match /base/index.js -> /index.js, wrap', function(done) {
+      request(app.listen())
+        .get('/base/index.js')
+        .expect(util.define('index', 'var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n'))
+        .expect(200, done);
+    });
+  });
+
   describe('dependent package', function() {
 
     before(function() {
@@ -362,6 +379,34 @@ function wrap(server, middleware) {
       .get('/noentry.js')
       .expect('define(\'noentry\', function(require, exports, module){\nconsole.log(\'no entry\');\n\n});\n')
       .expect(200, done);
+    });
+  });
+
+  describe('standalone with base', function() {
+
+    before(function() {
+      app = server();
+      app.use(middleware(join(fixtures, 'standalone'), {
+        base: 'http://a.com/b/c'
+      }));
+    });
+
+    it('with standalone', function(done) {
+      request(app.listen())
+        .get('/index.js')
+        .expect(/seajs\.config\(\{base:'http:\/\/a\.com\/b\/c'\}\);/)
+        .expect(/\ndefine\(\'index\', function\(require, exports, module\)\{\nmodule.exports = function\(\) \{\n  require\(\".\/noentry\.js\"\);\n  console.log\(\'standalone\'\);\n\};\n\n\}\);\n/)
+        .expect(/\/\*\! Init \*\/\ng_spm_init\(\'\/index.js\'\);\n$/)
+        .expect(200, done);
+    });
+
+    it('with standalone and base path', function(done) {
+      request(app.listen())
+        .get('/b/c/index.js')
+        .expect(/seajs\.config\(\{base:'http:\/\/a\.com\/b\/c'\}\);/)
+        .expect(/\ndefine\(\'index\', function\(require, exports, module\)\{\nmodule.exports = function\(\) \{\n  require\(\".\/noentry\.js\"\);\n  console.log\(\'standalone\'\);\n\};\n\n\}\);\n/)
+        .expect(/\/\*\! Init \*\/\ng_spm_init\(\'\/index.js\'\);\n$/)
+        .expect(200, done);
     });
   });
 
