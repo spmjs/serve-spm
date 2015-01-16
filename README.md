@@ -41,6 +41,10 @@ Map pathname for debug. e.g. `paths: [['/a/b/c/', '']]`
 
 Enable 304 cache.
 
+### base
+
+Set seajs's base.
+
 ## LICENSE
 
 Copyright (c) 2014 sorrycc. Licensed under the MIT license.

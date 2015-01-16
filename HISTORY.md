@@ -2,6 +2,10 @@
 
 ---
 
+## 0.9.0
+
+add base opt to set seajs's base
+
 ## 0.8.1
 
 - feat(util) add red color for console.error msg, Fix [spmjs/spm-server#15](https://github.com/spmjs/spm-server/issues/15)
