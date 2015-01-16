@@ -184,6 +184,23 @@ function wrap(server, middleware) {
     });
   });
 
+  describe('self package with base', function() {
+
+    before(function () {
+      app = server();
+      app.use(middleware(join(fixtures, 'parser'), {
+        base: 'http://a.com/base/'
+      }));
+    });
+
+    it('should match /base/index.js -> /index.js, wrap', function(done) {
+      request(app.listen())
+        .get('/base/index.js')
+        .expect(util.define('index', 'var b = require("b/0.1.0/index.js");\nconsole.log(\'a\');\n'))
+        .expect(200, done);
+    });
+  });
+
   describe('dependent package', function() {
 
     before(function() {
