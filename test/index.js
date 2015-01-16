@@ -365,6 +365,34 @@ function wrap(server, middleware) {
     });
   });
 
+  describe('standalone with base', function() {
+
+    before(function() {
+      app = server();
+      app.use(middleware(join(fixtures, 'standalone'), {
+        base: 'http://a.com/b/c'
+      }));
+    });
+
+    it('with standalone', function(done) {
+      request(app.listen())
+        .get('/index.js')
+        .expect(/seajs\.config\(\{base:'http:\/\/a\.com\/b\/c'\}\);/)
+        .expect(/\ndefine\(\'index\', function\(require, exports, module\)\{\nmodule.exports = function\(\) \{\n  require\(\".\/noentry\.js\"\);\n  console.log\(\'standalone\'\);\n\};\n\n\}\);\n/)
+        .expect(/\/\*\! Init \*\/\ng_spm_init\(\'\/index.js\'\);\n$/)
+        .expect(200, done);
+    });
+
+    it('with standalone and base path', function(done) {
+      request(app.listen())
+        .get('/b/c/index.js')
+        .expect(/seajs\.config\(\{base:'http:\/\/a\.com\/b\/c'\}\);/)
+        .expect(/\ndefine\(\'index\', function\(require, exports, module\)\{\nmodule.exports = function\(\) \{\n  require\(\".\/noentry\.js\"\);\n  console.log\(\'standalone\'\);\n\};\n\n\}\);\n/)
+        .expect(/\/\*\! Init \*\/\ng_spm_init\(\'\/index.js\'\);\n$/)
+        .expect(200, done);
+    });
+  });
+
   it('isModified disable', function(done) {
     app = server();
     app.use(middleware(join(fixtures, 'parser')));
