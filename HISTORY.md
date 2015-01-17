@@ -2,6 +2,10 @@
 
 ---
 
+## 0.9.1
+
+fix(standalonify) unique id in define and spm_init, Fix [#28](https://github.com/spmjs/serve-spm/issues/28)
+
 ## 0.9.0
 
 add base opt to set seajs's base
