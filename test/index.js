@@ -410,6 +410,24 @@ function wrap(server, middleware) {
     });
   });
 
+  describe('prefix', function() {
+
+    before(function() {
+      app = server();
+      app.use(middleware(join(fixtures, 'prefix/simple'), {
+        prefix: 'simple'
+      }));
+    });
+
+    it('with standalone', function(done) {
+      request(app.listen())
+      .get('/index.js')
+      .expect(util.define('simple/index', 'exports.a = 1;\n'))
+      .expect(200, done);
+    });
+
+  });
+
   it('isModified disable', function(done) {
     app = server();
     app.use(middleware(join(fixtures, 'parser')));

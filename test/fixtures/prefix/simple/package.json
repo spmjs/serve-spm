@@ -1,0 +1,15 @@
+{
+  "name": "simple",
+  "title": "简单组件",
+  "version": "1.0.0",
+  "description": "",
+  "main": "schema.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "spm": {
+    "main": "index.js"
+  }
+}
