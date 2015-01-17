@@ -8,7 +8,7 @@ describe('standalonify', function() {
 
     var origin = 'alert(1);';
     var sea = fs.readFileSync(join(__dirname, '../sea.js'), 'utf-8');
-    var expected = sea + '\n/* Config Base */\nseajs.config({base:\'/\'});\n\nalert(1);\n\n/*! Init */\ng_spm_init(\'/a\');\n';
+    var expected = sea + '\n/* Config Base */\nseajs.config({base:\'/\'});\n\nalert(1);\n\n/*! Init */\ng_spm_init(\'a\');\n';
 
     var stream = standalonifyParser({url:'/a'});
     stream.on('data', function(newFile) {
@@ -26,7 +26,7 @@ describe('standalonify', function() {
 
     var origin = 'alert(1);';
     var sea = fs.readFileSync(join(__dirname, '../sea.js'), 'utf-8');
-    var expected = sea + '\n/* Config Base */\nseajs.config({base:\'http://a.com/b/c/\'});\n\nalert(1);\n\n/*! Init */\ng_spm_init(\'/a\');\n';
+    var expected = sea + '\n/* Config Base */\nseajs.config({base:\'http://a.com/b/c/\'});\n\nalert(1);\n\n/*! Init */\ng_spm_init(\'a\');\n';
 
     var stream = standalonifyParser({url:'/a',base:'http://a.com/b/c/'});
     stream.on('data', function(newFile) {
