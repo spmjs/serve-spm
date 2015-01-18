@@ -7,20 +7,22 @@ var express = require('express');
 var expressMiddleware = require('../');
 var fixtures = join(__dirname, 'fixtures');
 var isSupportGenerator = require('generator-support');
+var pedding = require('pedding');
 
 describe('express', function() {
-  wrap(express, expressMiddleware);
+  wrap(express, expressMiddleware, 'express');
 });
 
 if (isSupportGenerator) {
   var koa = require('koa');
+  var mount = require('koa-mount');
   var koaMiddleware = require('../lib/koa');
   describe('koa', function() {
-    wrap(koa, koaMiddleware);
+    wrap(koa, koaMiddleware, 'koa');
   });
 }
 
-function wrap(server, middleware) {
+function wrap(server, middleware, type) {
   var app;
 
   describe('html', function() {
@@ -408,6 +410,39 @@ function wrap(server, middleware) {
         .expect(/\/\*\! Init \*\/\ng_spm_init\(\'index.js\'\);\n$/)
         .expect(200, done);
     });
+  });
+
+  describe('prefix', function() {
+
+    // only support for koa
+    if (type !== 'koa') {
+      return;
+    }
+
+    before(function() {
+      app = server();
+      app.use(mount('/simple', middleware(join(fixtures, 'prefix/simple'), {
+        prefix: 'simple'
+      })));
+
+      app.use(mount('/b', middleware(join(fixtures, 'prefix/b'), {
+        prefix: 'b'
+      })));
+    });
+
+    it('should support serve two spm module at the same app', function(done) {
+      done = pedding(done, 2);
+      request(app.listen())
+      .get('/simple/index.js')
+      .expect(util.define('simple/index', 'exports.a = 1;\n'))
+      .expect(200, done);
+
+      request(app.listen())
+      .get('/b/index.js')
+      .expect(util.define('b/index', 'exports.b = 1;\n'))
+      .expect(200, done);
+    });
+
   });
 
   it('isModified disable', function(done) {
