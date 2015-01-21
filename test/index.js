@@ -374,6 +374,14 @@ function wrap(server, middleware) {
       .expect(200, done);
     });
 
+    it('with standalone, name/version/output', function(done) {
+      request(app.listen())
+      .get('/standalone/1.0.0/index.js')
+      .expect(/\ndefine\(\'standalone\/1\.0\.0\/index\', function\(require, exports, module\)\{\nmodule.exports = function\(\) \{\n  require\(\".\/noentry\.js\"\);\n  console.log\(\'standalone\'\);\n\};\n\n\}\);\n/)
+      .expect(/\/\*\! Init \*\/\ng_spm_init\(\'standalone\/1\.0\.0\/index.js\'\);\n$/)
+      .expect(200, done);
+    });
+
     it('no entry', function(done) {
       request(app.listen())
       .get('/noentry.js')
