@@ -418,6 +418,23 @@ function wrap(server, middleware) {
     });
   });
 
+  describe('6to5', function() {
+
+    before(function () {
+      app = server();
+      app.use(middleware(join(fixtures, 'to5')));
+    });
+
+    it('6to5', function(done) {
+      request(app.listen())
+        .get('/a.js')
+        .expect(/"use strict";/)
+        .expect(/ref\[2\]/)
+        .expect(200, done);
+    });
+
+  });
+
   it('isModified disable', function(done) {
     app = server();
     app.use(middleware(join(fixtures, 'parser')));
