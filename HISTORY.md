@@ -2,6 +2,11 @@
 
 ---
 
+## 0.10.0
+
+- 支持 es6，通过 spm.6to5 开启
+- 支持 `--sea`, `--standalone` 和 `--umd`
+
 ## 0.9.1
 
 fix(standalonify) unique id in define and spm_init, Fix [#28](https://github.com/spmjs/serve-spm/issues/28)
