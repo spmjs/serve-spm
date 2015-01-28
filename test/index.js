@@ -390,6 +390,23 @@ function wrap(server, middleware) {
     });
   });
 
+  describe('standalone using `--standalone`', function() {
+
+    before(function () {
+      app = server();
+      app.use(middleware(join(fixtures, 'standalone-using-standalone')));
+    });
+
+    it('with standalone', function (done) {
+      request(app.listen())
+        .get('/index.js')
+        .expect(/\ndefine\(\'index\', function\(require, exports, module\)\{\nmodule.exports = function\(\) \{\n  require\(\".\/noentry\.js\"\);\n  console.log\(\'standalone\'\);\n\};\n\n\}\);\n/)
+        .expect(/\/\*\! Init \*\/\ng_spm_init\(\'index.js\'\);\n$/)
+        .expect(200, done);
+    });
+
+  });
+
   describe('standalone with base', function() {
 
     before(function() {
