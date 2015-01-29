@@ -2,6 +2,10 @@
 
 ---
 
+## 0.10.1
+
+修复 win 下的路径问题, [#32](https://github.com/spmjs/serve-spm/issues/32)
+
 ## 0.10.0
 
 - 支持 es6，通过 spm.6to5 开启
