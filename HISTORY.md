@@ -2,6 +2,10 @@
 
 ---
 
+## 0.10.2
+
+Deps: upgrade father to 0.11
+
 ## 0.10.1
 
 修复 win 下的路径问题, [#32](https://github.com/spmjs/serve-spm/issues/32)
