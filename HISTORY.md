@@ -2,9 +2,10 @@
 
 ---
 
-## 0.10.3
+## 0.11.0
 
-Support ~ prefix module, introduced by webpack
+- 支持 CSS 模块的 ~ 前缀 (由 webpack 引入)
+- 支持 anima-template
 
 ## 0.10.2
 
