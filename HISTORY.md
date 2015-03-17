@@ -2,6 +2,10 @@
 
 ---
 
+## 0.10.3
+
+Support ~ prefix module, introduced by webpack
+
 ## 0.10.2
 
 Deps: upgrade father to 0.11
