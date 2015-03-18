@@ -23,7 +23,7 @@
     "chalk": "^0.5.1",
     "css-imports": "~0.3.0",
     "debug": "~2.1.0",
-    "father": "~0.11.0",
+    "father": "~0.14.0",
     "generator-support": "~0.0.1",
     "glob": "~4.0.6",
     "gulp-atpl": "~0.1.0",
