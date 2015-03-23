@@ -2,6 +2,13 @@
 
 ---
 
+## 0.12.0
+
+- 支持 global 参数
+- 升级 seajs 到 3
+- Deps: 升级 father 到 0.14，支持循环依赖
+- Deps: gulp-6to5 -> gulp-babel
+
 ## 0.11.1
 
 - 支持按需加载
