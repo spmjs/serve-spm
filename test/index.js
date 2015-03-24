@@ -452,6 +452,22 @@ function wrap(server, middleware) {
 
   });
 
+  describe('ignore', function() {
+
+    before(function () {
+      app = server();
+      app.use(middleware(join(fixtures, 'ignore')));
+    });
+
+    it('ignore', function(done) {
+      request(app.listen())
+        .get('/a.js')
+        .expect(/require\('jquery'\);/)
+        .expect(200, done);
+    });
+
+  });
+
   it('isModified disable', function(done) {
     app = server();
     app.use(middleware(join(fixtures, 'parser')));
