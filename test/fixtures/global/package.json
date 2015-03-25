@@ -1,0 +1,6 @@
+{
+  "spm": {
+    "output": ["a.js"],
+    "buildArgs": "--global react:React"
+  }
+}

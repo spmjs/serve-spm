@@ -1,0 +1,9 @@
+{
+  "spm": {
+    "output": ["a.js"],
+    "buildArgs": "--global react:React",
+    "dependencies": {
+      "b": "0.1.0"
+    }
+  }
+}

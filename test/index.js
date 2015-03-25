@@ -468,6 +468,38 @@ function wrap(server, middleware) {
 
   });
 
+  describe('global', function() {
+
+    before(function () {
+      app = server();
+      app.use(middleware(join(fixtures, 'global')));
+    });
+
+    it('global', function(done) {
+      request(app.listen())
+        .get('/a.js')
+        .expect(/var r = window.React;/)
+        .expect(200, done);
+    });
+
+  });
+
+  describe('global-deps', function() {
+
+    before(function () {
+      app = server();
+      app.use(middleware(join(fixtures, 'global-deps')));
+    });
+
+    it('global-deps', function(done) {
+      request(app.listen())
+        .get('/b/0.1.0/b.js')
+        .expect(/var r = window.React;/)
+        .expect(200, done);
+    });
+
+  });
+
   it('isModified disable', function(done) {
     app = server();
     app.use(middleware(join(fixtures, 'parser')));
