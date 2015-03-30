@@ -131,7 +131,7 @@ function wrap(server, middleware) {
     it('should match .tpl', function(done) {
       request(app.listen())
       .get('/a/0.1.0/h.tpl')
-      .expect(util.define('a/0.1.0/h.tpl', 'module.exports = \'<div id="h">\'</div>\';'))
+      .expect(util.define('a/0.1.0/h.tpl', 'module.exports = \'<div id="h">\\\'</div>\';'))
       .expect(200, done);
     });
 
