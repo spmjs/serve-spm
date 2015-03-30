@@ -135,6 +135,13 @@ function wrap(server, middleware) {
       .expect(200, done);
     });
 
+    it('should match .html', function(done) {
+      request(app.listen())
+      .get('/a/0.1.0/k.html.js')
+      .expect(util.define('a/0.1.0/k.html', 'module.exports = \'<div id="k">\\\'</div>\';'))
+      .expect(200, done);
+    });
+
     it('should match .handlebars', function(done) {
       request(app.listen())
       .get('/a/0.1.0/i.handlebars')
@@ -532,6 +539,7 @@ function wrap(server, middleware) {
     request(app.listen())
       .get('/package.json')
       .set('X-Requested-With', 'XMLHttpRequest')
+      .expect('content-type', 'application/json')
       .expect('{\n  "name": "a",\n  "version": "0.1.0",\n  "spm": {\n    "dependencies": {\n      "b": "0.1.0",\n      "handlebars-runtime": "1.3.0"\n    },\n    "devDependencies": {\n      "c": "0.1.0"\n    },\n    "output": [\n      "index.js"\n    ]\n  }\n}\n')
       .expect(200, done);
   });
