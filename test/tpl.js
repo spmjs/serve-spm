@@ -7,7 +7,7 @@ describe('tpl', function() {
 
     var origin = '{{a}}\n\r\'\"';
     var expected = util.define('module.exports = \'' +
-      '{{a}}\'\"\';');
+      '{{a}}\\\'\"\';');
 
     var stream = tplParser();
     stream.on('data', function(newFile) {
