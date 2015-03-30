@@ -2,6 +2,11 @@
 
 ---
 
+## 0.14.0
+
+- fix(tpl): single quote in tpl
+- feat(parser/html): add support .html.js
+
 ## 0.13.2
 
 - 修复缺少依赖包 mixarg 的问题
