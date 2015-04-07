@@ -2,6 +2,10 @@
 
 ---
 
+## 0.14.1 (2015-4-7)
+
+- fix(css): include seajs-css to require css in js
+
 ## 0.14.0
 
 - fix(tpl): single quote in tpl
