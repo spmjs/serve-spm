@@ -507,6 +507,43 @@ function wrap(server, middleware) {
 
   });
 
+  describe('idleading', function() {
+
+    before(function () {
+      app = server();
+      app.use(middleware(join(fixtures, 'idleading')));
+    });
+
+    it('js', function(done) {
+      request(app.listen())
+        .get('/a/a/0.1.0/a.js')
+        .expect(/define\('a\/a\/0\.1\.0\/a'/)
+        .expect(200, done);
+    });
+
+    it('css', function(done) {
+      request(app.listen())
+        .get('/a/a/0.1.0/a.css.js')
+        .expect(/define\('a\/a\/0\.1\.0\/a\.css'/)
+        .expect(200, done);
+    });
+
+    it('tpl', function(done) {
+      request(app.listen())
+        .get('/a/a/0.1.0/a.tpl.js')
+        .expect(/define\('a\/a\/0\.1\.0\/a\.tpl'/)
+        .expect(200, done);
+    });
+
+    it('json', function(done) {
+      request(app.listen())
+        .get('/a/a/0.1.0/a.json.js')
+        .expect(/define\('a\/a\/0\.1\.0\/a\.json'/)
+        .expect(200, done);
+    });
+
+  });
+
   it('isModified disable', function(done) {
     app = server();
     app.use(middleware(join(fixtures, 'parser')));

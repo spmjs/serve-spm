@@ -1,0 +1,8 @@
+{
+  "name": "a",
+  "version": "0.1.0",
+  "spm": {
+    "output": ["a.js"],
+    "buildArgs": "--idleading a/{{name}}/{{version}}"
+  }
+}

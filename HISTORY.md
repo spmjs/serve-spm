@@ -2,6 +2,10 @@
 
 ---
 
+## 0.15.0 (2015-4-23)
+
+- feat: support idleading in buildArgs
+
 ## 0.14.1 (2015-4-7)
 
 - fix(css): include seajs-css to require css in js
