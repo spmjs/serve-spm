@@ -2,6 +2,10 @@
 
 ---
 
+## 1.0.0 (2015-05-04)
+
+- feat: parse ~ prefix css deps as module, else as file
+
 ## 0.15.0 (2015-4-23)
 
 - feat: support idleading in buildArgs
